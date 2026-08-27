@@ -69,24 +69,27 @@ D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat -mode batch -source scripts\creat
 
 ## 4. 预编译产物（dist 目录，其他人可直接使用）
 
-`dist/` 目录存放编译好的产物，无需重新跑工程即可烧录使用：
+`dist/` 目录存放编译好的产物，无需重新跑工程即可烧录使用。**命名约定**：每工程一套产物，
+以工程名区分 —— `dist/<工程名>.bit / .ltx / .bin`（本工程为 `memblaze_vio`）：
 
 | 文件 | 用途 |
 |---|---|
-| `memblaze_vio_top.bit` | JTAG 在线下载（Vivado Hardware Manager → Program Device） |
-| `memblaze_vio_top.ltx` | VIO 调试探针文件（Hardware Manager 中关联后即可看到 `vio_0` 窗口，控制 probe_out0/1/2 → 3 个 LED；必须与 .bit 配套使用） |
-| `memblaze_vio_top.bin` | SPIx4 flash 烧录镜像（板卡配置模式为 SPIx4，可用 Vivado 的 Add Configuration Memory Device 或其它烧写器写入 flash，上电自启动） |
+| `memblaze_vio.bit` | JTAG 在线下载（Vivado Hardware Manager → Program Device） |
+| `memblaze_vio.ltx` | VIO 调试探针文件（Hardware Manager 中关联后即可看到 `vio_0` 窗口，控制 probe_out0/1/2 → 3 个 LED；必须与 .bit 同编译产物配套） |
+| `memblaze_vio.bin` | SPIx4 flash 烧录镜像（上电自启动，烧录步骤见仓库根目录 `FLASH_BURN_GUIDE.md`） |
 
 ### 使用步骤（JTAG 方式，最快）
 
 1. Vivado → **Hardware Manager** → Open Target（连接 JTAG）
-2. Program Device 选择 `dist/memblaze_vio_top.bit`
+2. Program Device 选择 `dist/memblaze_vio.bit`
 3. 加载探针：勾选匹配的 `.ltx` 文件（或 Hardware Manager 自动提示添加）
 4. open **hw_vio** 窗口 → `vio_0`：勾选 `probe_out0/1/2` 控制 LED_G/LED_Y/LED_R
 
-> 若想重新生成这些产物：bit/ltx 由 `scripts/create_project.tcl` 构建；bin 由 `scripts/gen_flash_bin.tcl` 生成。
+> 重新生成：bit/ltx 由 `scripts/create_project.tcl` 构建并自动发布到 dist/；bin 由 `scripts/gen_flash_bin.tcl` 生成。
+> 新建工程：复制本目录为模板，修改脚本顶部 `proj_name` 与源码即可，产物自动按新工程名发布。
 
 ## 5. 已生成结果
 
 - 工程：`projects/memblaze_vio.xpr`
 - Bitstream：`projects/memblaze_vio.runs/impl_1/memblaze_vio_top.bit`
+- 分发产物：`dist/memblaze_vio.bit` / `dist/memblaze_vio.ltx` / `dist/memblaze_vio.bin`

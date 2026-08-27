@@ -33,6 +33,8 @@ webtalk*
 !dist/*.bit
 !dist/*.bin
 !dist/*.ltx
+# project-local dist folders are NOT tracked (canonical dist is at repo root)
+*/dist/
 
 # ---- IP cache ----
 ip_user_files/

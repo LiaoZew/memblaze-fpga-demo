@@ -1,22 +1,32 @@
 #==============================================================================
-# MemBlaze xc7k325tffg900-2 - VIO LED demo - project build script (Vivado 2024.2)
+# MemBlaze xc7k325tffg900-2 - project build script (Vivado 2024.2)
 #
 # Run:
 #   vivado -mode batch -source scripts/create_project.tcl
 #
-# Creates project "memblaze_vio", adds a VIO core with 3 x 1-bit output
-# probes (drive LED_G / LED_Y / LED_R), synthesizes, implements and writes
-# the bitstream.
+# Creating a NEW project for this board:
+#   1. create a new folder (e.g. <new_proj>/) and copy this scripts/ folder
+#   2. set proj_name below to the new project name
+#      (artifacts published to <root>/dist are named <proj_name>.bit/.ltx)
+#   3. put the top module + constraint files in src/ (update add_files below)
+#   4. run this script (it synthesizes, implements and writes the bitstream)
+#   5. run scripts/gen_flash_bin.tcl to produce the SPIx4 flash image
+#
+# Artifact naming convention (many projects on the same board):
+#   dist/<proj_name>.bit  - JTAG bitstream
+#   dist/<proj_name>.ltx  - VIO debug probes (must match the .bit)
+#   dist/<proj_name>.bin  - SPIx4 flash image  (from gen_flash_bin.tcl)
 #==============================================================================
 
 set part          xc7k325tffg900-2
 set proj_name     memblaze_vio
 set script_dir    [file dirname [info script]]
 set root          [file normalize [file join $script_dir ..]]
+set repo_root     [file normalize [file join $script_dir ../..]]
 set src_dir       [file join $root src]
 set proj_dir      [file join $root projects]
 
-puts "=== MemBlaze VIO LED project: $proj_name (part $part) ==="
+puts "=== MemBlaze project: $proj_name (part $part) ==="
 
 # Fresh project
 if {[file exists $proj_dir]} {
@@ -75,7 +85,28 @@ if {[string first "Complete" $impl_status] < 0} {
     error "Implementation failed: $impl_status"
 }
 
-set bit_file [file join [get_property DIRECTORY [get_runs impl_1]] memblaze_vio_top.bit]
-puts "=== DONE: bitstream at $bit_file"
-puts "=== Open Hardware Manager, program the device, then use the hw_vio "
-puts "=== 'vio_0' window to toggle probe_out0/1/2 (LED_G/LED_Y/LED_R)."
+#------------------------------------------------------------------------------
+# Publish project-named artifacts to <repo_root>/dist/
+#------------------------------------------------------------------------------
+set dist_dir [file join $repo_root dist]
+file mkdir $dist_dir
+set impl_dir [get_property DIRECTORY [get_runs impl_1]]
+set bit_src  [lindex [glob -nocomplain [file join $impl_dir *.bit]] 0]
+set ltx_src  [lindex [glob -nocomplain [file join $impl_dir *.ltx]] 0]
+if {$bit_src ne ""} {
+    file copy -force $bit_src [file join $dist_dir "$proj_name.bit"]
+    puts "PUBLISH: [file join $dist_dir "$proj_name.bit"]"
+} else {
+    puts "WARNING: no .bit found in $impl_dir"
+}
+if {$ltx_src ne ""} {
+    file copy -force $ltx_src [file join $dist_dir "$proj_name.ltx"]
+    puts "PUBLISH: [file join $dist_dir "$proj_name.ltx"]"
+} else {
+    puts "WARNING: no .ltx found (design has no debug cores)"
+}
+
+puts "=== DONE. Bitstream: $bit_src"
+puts "=== Flash image: run scripts/gen_flash_bin.tcl"
+puts "=== Hardware: program dist/$proj_name.bit (+ .ltx for hw_vio),
+       or burn dist/$proj_name.bin into the SPI flash (see FLASH_BURN_GUIDE.md)."
