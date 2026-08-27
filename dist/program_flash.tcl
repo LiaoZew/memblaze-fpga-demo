@@ -59,6 +59,12 @@ proc find_vivado_root {} {
 set script_dir [file dirname [file normalize [info script]]]
 set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
 set design_bit  [getopt DESIGN_BIT {}]
+# -----------------------------------------------------------------------------
+# [FLASH PART] 板载 flash 型号 (Micron N25Q256A13EF804F, 3.3 V) 对应的
+# Vivado cfgmem 器件名（2024.2 用 MT25Q 命名；千万不要用旧名 n25q256-3.3v-*，
+# 2024.2 数据库里不存在 -> 会报 get_cfgmem_parts 为空/下载失败）。
+# 换板子/换 flash 时：改这里或运行时 set FLASH_PART <新型号>
+# -----------------------------------------------------------------------------
 set flash_part  [getopt FLASH_PART {mt25ql256-spi-x1_x2_x4}]
 set target      [getopt TARGET     {}]
 set jtag_freq   [getopt JTAG_FREQ  {}]
