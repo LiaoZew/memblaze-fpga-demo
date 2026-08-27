@@ -112,17 +112,27 @@ source dist/program_flash.tcl
 ### 5.1 `program_hw_cfgmem` 报错：`Flash Programming Unsuccessful: Failure to set flash parameters`
 
 7 系列通过 JTAG 间接烧录 SPI flash 时的典型错误，出现时机是 `program_hw_cfgmem` 执行阶段
-（此前 cfgmem 绑定、文件加载都已成功）。按下面的优先级排查：
+（此前 cfgmem 绑定、文件加载都已成功）。
+
+**关键判据**：完整日志里如果完全没有 `Flash ID` 之类的读数，说明驱动连一次 SPI 访问都没建立，
+问题在**硬件链路**而非软件（已实测排除：器件名/容量、JTAG 频率 6MHz、bin 32MB、ADDRESS_RANGE 均无效）。
 
 | 排查项 | 操作 |
 |---|---|
-| ① JTAG 时钟过高（最常见） | 降低 JTAG 频率后重跑：`set JTAG_FREQ 6000000`（仍不行用 3000000）再 `source dist/program_flash.tcl` |
-| ② FPGA 未处于未配置态 | 间接烧录要求 **DONE=0**（日志中应出现 `Device ... is not programmed (DONE status = 0)`）。若提示 DONE=1，先对器件执行 `program_hw_devices -clear` 或断电重上电 |
-| ③ 器件名与硅片不匹配 | 在 GUI 用 **Add Configuration Memory Device** 手工核对列表中 `mt25ql256-spi-x1_x2_x4` 是否存在；确认芯片是 3.3 V（丝印含 `13E`），勿用 1.8 V 的 `mt25qu256-*` |
-| ④ flash 供电/电平 | 确认 flash 的 3.3 V 电源、VIO 与 FPGA bank-0 配置电压一致（CFGBVS）；用万用表确认 CCLK / FCS_B / D[3:0] 到 flash 的连接与上拉电阻正常 |
-| ⑤ WP#/HOLD# 引脚 | 写保护失效会导致参数写不进去：确认 **WP#（写保护）上拉到 VCC**、HOLD# 上拉（或按板卡原理图处理），排除浮空/接地 |
-| ⑥ 接触与干扰 | 更换/插紧 JTAG 线与排针（TDO G10 / TDI H10 / TMS F10 / TCK E10），远离干扰源；拔掉其它 JTAG 链设备 |
-| ⑦ 换 GUI 流验证 | 用方法二（GUI 图形界面）跑一次同样的擦除/编程/校验：若 GUI 成功而脚本失败，多半是脚本属性差异，把 GUI 生成的 Tcl 日志发回来对照 |
+| ① **MODE 引脚必须为 SPI 模式（最常见）** | 7 系列间接烧录要求 FPGA 配置模式为 SPI。若 M[2:0] 拨码/跳线处于 **JTAG 模式**，配置口不驱动 SPI 引脚 → 正是此错。把 M[2:0] 拨到 SPI（通常 001，以板卡手册为准），**断电重上电**后重烧 |
+| ② JTAG 时钟过高（次常见） | 降低 JTAG 频率后重跑：`set JTAG_FREQ 6000000`（仍不行用 3000000）再 `source dist/program_flash.tcl` |
+| ③ FPGA 未处于未配置态 | 间接烧录要求 **DONE=0**（日志应出现 `Device ... is not programmed (DONE status = 0)`）；若 DONE=1，断电重新上电清掉配置 |
+| ④ 器件名与硅片不匹配 | GUI **Add Configuration Memory Device** 核对 `mt25ql256-spi-x1_x2_x4`；芯片为 3.3 V（丝印含 `13E`），勿用 1.8 V 的 `mt25qu256-*` |
+| ⑤ flash 接线在**专用配置引脚**上 | 原理图确认 flash 的 CCLK/FCS_B/D00-D03 接 FPGA 的**配置脚**（不是普通 IO）；若接普通 IO，Vivado 间接烧录永远无法访问 → 需改用 FPGA 内部软 SPI 方案（见下） |
+| ⑥ flash 供电/电平 | flash 3.3 V 电源、VIO 与 bank-0 配置电压（CFGBVS）一致；万用表量 CCLK/FCS_B/D[3:0] 通路与上拉 |
+| ⑦ WP#/HOLD# 引脚 | **WP#（写保护）须上拉 VCC**、HOLD# 上拉（或按原理图处理），排除浮空/接地 |
+| ⑧ 接触与干扰 | 插紧 JTAG 线（TDO G10 / TDI H10 / TMS F10 / TCK E10），远离干扰源，关掉其它占用 JTAG 的程序 |
+| ⑨ 换 GUI 流验证 | 用方法二 GUI 跑一次擦除/编程/校验：若 GUI 成功而脚本失败，则为脚本属性差异，把 GUI 的 Tcl 日志发回对照 |
+
+> 若 ①~⑧ 全部确认无误仍失败：flash 极可能不在配置引脚上（普通 IO 直连），
+> 此时标准路径是**用 FPGA 内部软 SPI 控制器烧录**——按原理图确认 flash 引脚后，
+> 做一个通过 JTAG 下载的小 design（软 SPI 时钟频率 ≤ 1 MHz），把 `memblaze_vio.bin`
+> 逐页写入 flash（擦除后从 0x0 写）。可与硬件组确认该细节后再实施。
 
 > 快速再试命令（保持 GUI 连接状态）：
 > ```tcl
