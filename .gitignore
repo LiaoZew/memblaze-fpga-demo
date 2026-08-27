@@ -28,6 +28,12 @@ webtalk*
 *.wds
 *.mem
 
+# ---- Pre-built distribution artifacts (bit/ltx/bin for direct use) ----
+!dist/
+!dist/*.bit
+!dist/*.bin
+!dist/*.ltx
+
 # ---- IP cache ----
 ip_user_files/
 *.gen

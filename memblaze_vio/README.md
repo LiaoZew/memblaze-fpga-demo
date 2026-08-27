@@ -67,7 +67,26 @@ D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat -mode batch -source scripts\creat
 > 若不需要 JTAG 在线调试、希望上电按初始值显示，可将对应
 > `C_PROBE_OUTx_INIT_VAL` 改为 1。
 
-## 4. 已生成结果
+## 4. 预编译产物（dist 目录，其他人可直接使用）
+
+`dist/` 目录存放编译好的产物，无需重新跑工程即可烧录使用：
+
+| 文件 | 用途 |
+|---|---|
+| `memblaze_vio_top.bit` | JTAG 在线下载（Vivado Hardware Manager → Program Device） |
+| `memblaze_vio_top.ltx` | VIO 调试探针文件（Hardware Manager 中关联后即可看到 `vio_0` 窗口，控制 probe_out0/1/2 → 3 个 LED；必须与 .bit 配套使用） |
+| `memblaze_vio_top.bin` | SPIx4 flash 烧录镜像（板卡配置模式为 SPIx4，可用 Vivado 的 Add Configuration Memory Device 或其它烧写器写入 flash，上电自启动） |
+
+### 使用步骤（JTAG 方式，最快）
+
+1. Vivado → **Hardware Manager** → Open Target（连接 JTAG）
+2. Program Device 选择 `dist/memblaze_vio_top.bit`
+3. 加载探针：勾选匹配的 `.ltx` 文件（或 Hardware Manager 自动提示添加）
+4. open **hw_vio** 窗口 → `vio_0`：勾选 `probe_out0/1/2` 控制 LED_G/LED_Y/LED_R
+
+> 若想重新生成这些产物：bit/ltx 由 `scripts/create_project.tcl` 构建；bin 由 `scripts/gen_flash_bin.tcl` 生成。
+
+## 5. 已生成结果
 
 - 工程：`projects/memblaze_vio.xpr`
 - Bitstream：`projects/memblaze_vio.runs/impl_1/memblaze_vio_top.bit`
