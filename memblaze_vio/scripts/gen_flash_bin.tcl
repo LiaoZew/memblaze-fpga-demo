@@ -6,8 +6,10 @@
 #   vivado -mode batch -source scripts/gen_flash_bin.tcl
 #
 # The board configures from an SPI flash in SPIx4 mode (see ddr.xdc:
-# CONFIG_MODE SPIx4, SPI_BUSWIDTH 4, CONFIGRATE 66). The .bin image starts
-# at flash address 0x0 and is 16 MB (based on the uncompressed bitstream).
+# CONFIG_MODE SPIx4, SPI_BUSWIDTH 4, CONFIGRATE 66). On-board flash:
+# Micron N25Q256A13EF804F (256 Mb = 32 MB, 3.3 V) -> Vivado cfgmem part
+# n25q256-3.3v-spi-x1_x2_x4. The .bin image starts at flash address 0x0
+# (data ~11 MB, well below the 16 MB 3-byte-address boundary).
 #==============================================================================
 
 set part          xc7k325tffg900-2

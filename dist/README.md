@@ -9,9 +9,21 @@
 |---|---|
 | `memblaze_vio.bit` | JTAG 在线下载。Vivado **Hardware Manager → Program Device** 选择此文件 |
 | `memblaze_vio.ltx` | VIO 调试探针文件。Program 后关联此 `.ltx`（Hardware Manager 自动提示），打开 **hw_vio** 窗口即可看到 `vio_0` 的三个输出探针 `probe_out0/1/2`，分别对应 **LED_G(R24) / LED_Y(T20) / LED_R(T21)** |
-| `memblaze_vio.bin` | SPIx4 配置镜像（16 MB，未压缩）。板卡配置模式为 SPIx4（见 `memblaze_led.xdc`），用 Vivado **Add Configuration Memory Device** 或其它 SPI flash 烧写器写入 flash 后上电自启动 |
+| `memblaze_vio.bin` | SPIx4 配置镜像（约 11 MB，未压缩）。板载 flash 为 **Micron N25Q256A13EF804F（32 MB）**，写入其 0x0 起始地址，上电自启动；Vivado 器件名 `n25q256-3.3v-spi-x1_x2_x4` |
+| `program_flash.tcl` | 一键烧录脚本（推荐）：连接 JTAG → 擦除 → 空白检查 → 编程 → 校验，自动使用同目录 `memblaze_vio.bin` |
+| `FLASH_BURN_GUIDE.md` | SPI flash 烧录完整指南（GUI / 脚本 / 独立编程器三种方法 + FAQ） |
 
-## 快速开始（JTAG + VIO）
+## 快速开始
+
+**A. 烧录 flash（上电自启动，推荐）**
+
+```
+vivado -mode batch -source program_flash.tcl
+# 或 Hardware Manager -> Tcl Console -> source program_flash.tcl
+# 完成后断电重启，板卡从 SPI flash 自举
+```
+
+**B. JTAG 在线调试（不烧 flash）**
 
 ```
 Hardware Manager
