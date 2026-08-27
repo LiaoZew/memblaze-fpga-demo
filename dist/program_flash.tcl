@@ -3,7 +3,9 @@
 #
 # Flash on the board: Micron N25Q256A13EF804F
 #   - N25Q256A  256 Mb = 32 MB, 3.3 V, SPI NOR, standard SPI (1-1-4)
-#   - Vivado cfgmem part: n25q256-3.3v-spi-x1_x2_x4
+#   - NOTE: Micron renamed N25Q -> MT25Q. In Vivado 2024.2 the cfgmem part is
+#     mt25ql256-spi-x1_x2_x4   (mt25ql256 = 3.3 V; mt25qu256 = 1.8 V)
+#     (Older Vivado versions name it n25q256-3.3v-spi-x1_x2_x4)
 #
 # Image: <this script's folder>/memblaze_vio.bin
 #        (SPIx4, uncompressed bitstream ~11 MB, starting at flash address 0x0)
@@ -15,10 +17,10 @@
 #       Tcl Console -> source program_flash.tcl
 #
 # Optional overrides (set BEFORE sourcing; both env-var and plain Tcl var work):
-#   set BIN        D:/x/another.bin        ;# use a different .bin
-#   set FLASH_PART n25q256-3.3v-spi-x1_x2_x4 ;# different cfgmem part
+#   set BIN        D:/x/another.bin       ;# use a different .bin
+#   set FLASH_PART mt25ql256-spi-x1_x2_x4 ;# different cfgmem part
 #   set TARGET     */xilinx_tcf/Digilent/2102...A ;# pick the JTAG target
-#   set ONLY_VERIFY 1                      ;# skip erase/program, verify only
+#   set ONLY_VERIFY 1                     ;# skip erase/program, verify only
 #==============================================================================
 
 # ---- configuration (override: env var or plain Tcl variable) ----------------
@@ -29,13 +31,23 @@ proc getopt {name default} {
 }
 
 set script_dir [file dirname [file normalize [info script]]]
-set bin_file   [getopt BIN        [file join $script_dir memblaze_vio.bin]]
-set flash_part [getopt FLASH_PART {n25q256-3.3v-spi-x1_x2_x4}]
-set target     [getopt TARGET     {}]
+set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
+set flash_part  [getopt FLASH_PART {mt25ql256-spi-x1_x2_x4}]
+set target      [getopt TARGET     {}]
 set only_verify [expr {[getopt ONLY_VERIFY 0] eq "1"}]
 
 if {![file exists $bin_file]} {
     error "Configuration file not found: $bin_file"
+}
+
+# locate the cfgmem part; give useful candidates if the name is wrong
+set part_obj [lindex [get_cfgmem_parts $flash_part] 0]
+if {$part_obj eq ""} {
+    set candidates [lsort -unique [get_cfgmem_parts {*256*}]]
+    puts "ERROR: no cfgmem part matches '$flash_part'."
+    puts "Try one of these 256 Mb SPI parts:"
+    puts [join $candidates "\n"]
+    error "cfgmem part '$flash_part' not found"
 }
 
 puts "=================================================="
@@ -46,7 +58,7 @@ puts "   image   : $bin_file"
 puts "=================================================="
 
 # ---- connect to the JTAG target ---------------------------------------------
-open_hw
+open_hw_manager
 connect_hw_server
 if {$target ne ""} {
     open_hw_target $target
@@ -60,8 +72,10 @@ puts "device: [get_property NAME $hw_dev]  (part [get_property PART $hw_dev])"
 refresh_hw_device -update_hw_probes false $hw_dev
 
 # ---- bind the configuration memory device (reuse if already bound) -----------
-if {[catch {set cfgmem [current_hw_cfgmem]}]} {
-    create_hw_cfgmem -hw_device $hw_dev [lindex [get_cfgmem_parts $flash_part] 0]
+set cfgmem ""
+catch {set cfgmem [current_hw_cfgmem]}
+if {$cfgmem eq ""} {
+    create_hw_cfgmem -hw_device $hw_dev $part_obj
     set cfgmem [current_hw_cfgmem]
 }
 puts "cfgmem: [get_property NAME $cfgmem]  ($flash_part)"

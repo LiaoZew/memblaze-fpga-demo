@@ -29,7 +29,10 @@
   - 型号解读：`N25Q`（SPI NOR 家族）`256`（256 Mb）`A`（产品代）`13`（3.3 V 供电）
     `E`（工业级温度 -40~+85 °C）`F804`（封装/速度等级，以 datasheet 为准）
   - 容量 **256 Mb = 32 MB**；标准 SPI（1-1-1 / 1-1-4 模式）
-  - Vivado Hardware Manager 中的器件名（cfgmem part）：**`n25q256-3.3v-spi-x1_x2_x4`**
+  - Vivado Hardware Manager 中的器件名（cfgmem part）：**`mt25ql256-spi-x1_x2_x4`**
+    （Micron 已将 N25Q 系列更名 MT25Q；Vivado 2024.2 中 256Mb 对应条目为
+    `mt25ql256-spi-x1_x2_x4` = 3.3 V、`mt25qu256-spi-x1_x2_x4` = 1.8 V。
+    旧版 Vivado 名为 `n25q256-3.3v-spi-x1_x2_x4`，以本机 `get_cfgmem_parts` 查询结果为准）
 - `dist/<工程名>.bin` 由 `memblaze_vio/scripts/gen_flash_bin.tcl` 生成
   （`write_cfgmem -format bin -interface SPIx4`），镜像为**未压缩** bitstream
   （`BITSTREAM.GENERAL.COMPRESS FALSE`），数据约 11 MB，位于 32 MB flash 的 **0x0** 起始，
@@ -50,14 +53,14 @@ vivado -mode batch -source dist/program_flash.tcl
 source dist/program_flash.tcl
 ```
 
-脚本默认流程：**连接 JTAG → 绑定 cfgmem（n25q256-3.3v-spi-x1_x2_x4）→ 擦除 → 空白检查 → 编程 → 校验**。
+脚本默认流程：**连接 JTAG → 绑定 cfgmem（mt25ql256-spi-x1_x2_x4）→ 擦除 → 空白检查 → 编程 → 校验**。
 
 可选环境变量（按需 `set`）：
 
 | 变量 | 作用 | 示例 |
 |---|---|---|
 | `BIN` | 换用其它 bin | `set BIN D:/x/another.bin` |
-| `FLASH_PART` | 换用其它 flash | `set FLASH_PART n25q256-3.3v-spi-x1_x2_x4` |
+| `FLASH_PART` | 换用其它 flash | `set FLASH_PART mt25ql256-spi-x1_x2_x4` |
 | `TARGET` | JTAG 链上有多个目标时指定 | `set TARGET */xilinx_tcf/Digilent/1234...A` |
 | `ONLY_VERIFY` | 只校验不烧写（产线复查） | `set ONLY_VERIFY 1` |
 
@@ -72,7 +75,7 @@ source dist/program_flash.tcl
 
 1. 打开 **Vivado** → 左侧 **Hardware Manager** → **Open Target** → 连接 JTAG。
 2. 设备树右键 FPGA 器件 → **Add Configuration Memory Device**。
-3. 搜索并选择 **`n25q256-3.3v-spi-x1_x2_x4`**（对应板载 N25Q256A13EF804F）→ **OK**。
+3. 搜索并选择 **`mt25ql256-spi-x1_x2_x4`**（对应板载 N25Q256A13EF804F）→ **OK**。
 4. 烧录窗口：
    - **Assign Configuration File** → 选择 `dist/<工程名>.bin`；
    - 勾选 **Erase**（必选）、建议勾选 **Blank Check**、**Program**、**Verify**；
@@ -97,7 +100,7 @@ source dist/program_flash.tcl
 
 | 现象 | 可能原因与处理 |
 |---|---|
-| 找不到/选不对 flash | 确认使用 Vivado 器件名 **`n25q256-3.3v-spi-x1_x2_x4`**（对应 N25Q256A13EF804F）；勿选 1.8 V 版本（n25q256-1.8v-*） |
+| 找不到/选不对 flash | 确认使用 Vivado 器件名 **`mt25ql256-spi-x1_x2_x4`**（对应 N25Q256A13EF804F）；勿选 1.8 V 版本（mt25qu256-*） |
 | Verify 失败 | flash 型号/电压选错、接触不良 → 核对丝印（N25Q256A13EF804F），更换匹配型号重试 |
 | 烧录超时/中断 | JTAG 线接触不良或速率过高 → 确认 JTAG 链（TDO_0=G10、TDI_0=H10、TMS_0=F10、TCK_0=E10），必要时降低 JTAG 频率 |
 | 烧录后上电不启动 | ① MODE 引脚（M[2:0]）未配置为 SPIx4；② flash 内仍有旧镜像（先 Erase）；③ 镜像地址不是 0x0 |
