@@ -66,13 +66,22 @@ set only_verify [expr {[getopt ONLY_VERIFY 0] eq "1"}]
 
 if {![file exists $bin_file]} { error "Image file not found: $bin_file" }
 
-# ---- connect to the JTAG target ---------------------------------------------
-open_hw_manager
-connect_hw_server
-if {$target ne ""} {
-    open_hw_target $target
-} else {
-    open_hw_target
+# ---- connect to the JTAG target (idempotent) ---------------------------------
+# If a hw_server / target is ALREADY connected (e.g. the GUI Hardware Manager
+# or a standalone hw_server is open, or this session was used before), reuse
+# it instead of failing with:
+#   ERROR: [Labtoolstcl 44-586] Disconnect server connection, TCP:localhost:3121,
+#          before making a new one.
+catch {open_hw_manager}
+if {[llength [get_hw_servers -quiet]] == 0} {
+    connect_hw_server
+}
+if {[llength [get_hw_targets -quiet]] == 0} {
+    if {$target ne ""} {
+        open_hw_target $target
+    } else {
+        open_hw_target
+    }
 }
 current_hw_device [lindex [get_hw_devices] 0]
 set hw_dev [current_hw_device]
