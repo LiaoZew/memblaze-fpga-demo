@@ -1,0 +1,39 @@
+#=============================================================================
+# MemBlaze FPGA demo - git ignore rules
+# Omit Vivado build/run artifacts; keep only sources, scripts and docs.
+#=============================================================================
+
+# ---- Vivado project & run outputs ----
+projects/
+*.backup.jou
+*.backup.log
+*.jou
+*.log
+
+# ---- Vivado generated / temp ----
+.Xil/
+vivado.pb
+webtalk*
+*.rpx
+*.pb
+
+# ---- Simulation / synthesis artifacts ----
+*.dcp
+*.bit
+*.bin
+*.ltx
+*.rpt
+*.vcd
+*.wdb
+*.wds
+*.mem
+
+# ---- IP cache ----
+ip_user_files/
+*.gen
+*.hw
+
+# ---- OS junk ----
+Thumbs.db
+Desktop.ini
+.DS_Store
