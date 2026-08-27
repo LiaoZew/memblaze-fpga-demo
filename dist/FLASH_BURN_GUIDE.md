@@ -53,21 +53,39 @@ vivado -mode batch -source dist/program_flash.tcl
 source dist/program_flash.tcl
 ```
 
-脚本默认流程：**连接 JTAG → 绑定 cfgmem（mt25ql256-spi-x1_x2_x4）→ 擦除 → 空白检查 → 编程 → 校验**。
+脚本默认流程（**本板已实测通过**）：
 
-可选环境变量（按需 `set`）：
+```text
+连接 JTAG
+ -> 用 dist/memblaze_vio.bit 配置 FPGA（设计内含 SPI 网桥，日志出现
+    "design that has 1 SPI core(s)"，这是板卡访问 flash 的前提！）
+ -> 绑定 cfgmem（mt25ql256-spi-x1_x2_x4）
+ -> 擦除 -> 空白检查 -> 编程 -> 校验（全程约 8~9 分钟）
+ -> 断电重启，MODE=SPI 时从 flash 自举
+```
+
+> **关键机制（已实测验证）**：该板 SPI flash 连在 FPGA 的**用户 IO**上，只能通过
+> **一个已配置进 FPGA、且含 SPI core 的设计**访问（Vivado 日志应显示
+> “design has **1 SPI core(s)**”）。本仓库的 VIO demo bit **不含 SPI core**，
+> 无法直接用于烧录；请在 Vivado GUI 打开**含 SPI 控制器的工程**后再运行本脚本
+> （或批处理时用 `DESIGN_BIT` 指定该工程的 bit）。若无 SPI core 设计，需先做一个
+> 软 SPI 烧录 design（见 5.1）。
+
+可选变量（按需 `set`，普通 Tcl 变量或环境变量均可）：
 
 | 变量 | 作用 | 示例 |
 |---|---|---|
 | `BIN` | 换用其它 bin | `set BIN D:/x/another.bin` |
+| `DESIGN_BIT` | 换用其它含调试核的 bit | `set DESIGN_BIT D:/x/design.bit` |
 | `FLASH_PART` | 换用其它 flash | `set FLASH_PART mt25ql256-spi-x1_x2_x4` |
 | `TARGET` | JTAG 链上有多个目标时指定 | `set TARGET */xilinx_tcf/Digilent/1234...A` |
-| `JTAG_FREQ` | 降低 JTAG 时钟（信号完整性，见 5.1） | `set JTAG_FREQ 6000000` |
+| `JTAG_FREQ` | 降低 JTAG 时钟（信号完整性） | `set JTAG_FREQ 6000000` |
 | `ONLY_VERIFY` | 只校验不烧写（产线复查） | `set ONLY_VERIFY 1` |
 
 注意事项：
+- `DESIGN_BIT` 对应的设计**必须含 ILA/VIO 调试核**，否则没有 SPI 网桥、无法烧录；
 - 若 JTAG 链上还有其它器件需要旁路，先用 `connect_hw_target -disable_targets ...` 屏蔽或
-  设置 `PARTS.JTAGCHAIN.BYPASS`，再运行本脚本。
+  设置 `PARTS.JTAGCHAIN.BYPASS`，再运行本脚本；
 - 烧录时保持板卡供电稳定，过程中不要断电/断开 JTAG。
 
 ---
@@ -114,27 +132,27 @@ source dist/program_flash.tcl
 7 系列通过 JTAG 间接烧录 SPI flash 时的典型错误，出现时机是 `program_hw_cfgmem` 执行阶段
 （此前 cfgmem 绑定、文件加载都已成功）。
 
-**关键判据**：完整日志里如果完全没有 `Flash ID` 之类的读数，说明驱动连一次 SPI 访问都没建立，
-问题在**硬件链路**而非软件（已实测排除：器件名/容量、JTAG 频率 6MHz、bin 32MB、ADDRESS_RANGE 均无效）。
+**本板最终判据（已于实机验证）**：完整日志里如果没有“design has **1 SPI core(s)**”，
+而是 “1 VIO core(s)” 或根本没有 core 信息，就说明**当前配置进 FPGA 的设计不含 SPI core**，
+Vivado 无法建立到 flash 的通信 → 必报此错。
+已实测排除：器件名（mt25ql256 / s25fl256s 同错）、JTAG 频率（6/15/30MHz 同错）、
+bin 容量（16/32MB 同错）、ADDRESS_RANGE（use_file 同错）、探针关联（VIO bit 加 .ltx 仍无 SPI core）。
 
 | 排查项 | 操作 |
 |---|---|
-| ① **MODE 引脚必须为 SPI 模式（最常见）** | 7 系列间接烧录要求 FPGA 配置模式为 SPI。若 M[2:0] 拨码/跳线处于 **JTAG 模式**，配置口不驱动 SPI 引脚 → 正是此错。把 M[2:0] 拨到 SPI（通常 001，以板卡手册为准），**断电重上电**后重烧 |
-| ② JTAG 时钟过高（次常见） | 降低 JTAG 频率后重跑：`set JTAG_FREQ 6000000`（仍不行用 3000000）再 `source dist/program_flash.tcl` |
-| ③ FPGA 未处于未配置态 | 间接烧录要求 **DONE=0**（日志应出现 `Device ... is not programmed (DONE status = 0)`）；若 DONE=1，断电重新上电清掉配置 |
-| ④ 器件名与硅片不匹配 | GUI **Add Configuration Memory Device** 核对 `mt25ql256-spi-x1_x2_x4`；芯片为 3.3 V（丝印含 `13E`），勿用 1.8 V 的 `mt25qu256-*` |
-| ⑤ flash 接线在**专用配置引脚**上 | 原理图确认 flash 的 CCLK/FCS_B/D00-D03 接 FPGA 的**配置脚**（不是普通 IO）；若接普通 IO，Vivado 间接烧录永远无法访问 → 需改用 FPGA 内部软 SPI 方案（见下） |
-| ⑥ flash 供电/电平 | flash 3.3 V 电源、VIO 与 bank-0 配置电压（CFGBVS）一致；万用表量 CCLK/FCS_B/D[3:0] 通路与上拉 |
-| ⑦ WP#/HOLD# 引脚 | **WP#（写保护）须上拉 VCC**、HOLD# 上拉（或按原理图处理），排除浮空/接地 |
-| ⑧ 接触与干扰 | 插紧 JTAG 线（TDO G10 / TDI H10 / TMS F10 / TCK E10），远离干扰源，关掉其它占用 JTAG 的程序 |
-| ⑨ 换 GUI 流验证 | 用方法二 GUI 跑一次擦除/编程/校验：若 GUI 成功而脚本失败，则为脚本属性差异，把 GUI 的 Tcl 日志发回对照 |
+| ① **设计必须含 SPI core（本板根因）** | 日志需出现 `1 SPI core(s)`。GUI：打开**含 SPI 控制器的工程**再烧；批处理：`set DESIGN_BIT <SPI-core 工程的 .bit>` 后运行。VIO demo bit 不含 SPI core，不可用于烧录 |
+| ② JTAG 时钟过高 | `set JTAG_FREQ 6000000`（仍不行 3000000）后重跑 |
+| ③ FPGA 未处于未配置态 | 间接烧录流程本身会把需要的 SPI-core 设计配置进 FPGA；不要手动先烧其它位流 |
+| ④ 器件名与硅片不匹配 | GUI **Add Configuration Memory Device** 核对 `mt25ql256-spi-x1_x2_x4`；芯片 3.3 V（丝印含 `13E`），勿用 1.8 V 的 `mt25qu256-*` |
+| ⑤ flash 供电/电平 | flash 3.3 V 电源、VIO 与 bank-0 配置电压（CFGBVS）一致；万用表量 CCLK/FCS_B/D[3:0]（若走配置脚）或 SPI 数据线（若走用户 IO） |
+| ⑥ WP#/HOLD# 引脚 | **WP#（写保护）须上拉 VCC**、HOLD# 上拉（或按原理图处理），排除浮空/接地 |
+| ⑦ 接触与干扰 | 插紧 JTAG 线（TDO G10 / TDI H10 / TMS F10 / TCK E10），关掉其它占用 JTAG 的程序 |
 
-> 若 ①~⑧ 全部确认无误仍失败：flash 极可能不在配置引脚上（普通 IO 直连），
-> 此时标准路径是**用 FPGA 内部软 SPI 控制器烧录**——按原理图确认 flash 引脚后，
-> 做一个通过 JTAG 下载的小 design（软 SPI 时钟频率 ≤ 1 MHz），把 `memblaze_vio.bin`
-> 逐页写入 flash（擦除后从 0x0 写）。可与硬件组确认该细节后再实施。
+> **无 SPI-core 设计时的软 SPI 方案**：按原理图确认 flash 接 FPGA 的用户 IO 引脚，
+> 做一个含 SPI 控制器的小 design（可通过 JTAG 下载，如用 VIO 触发逐页写入，
+> 或在设计中自带状态机按命令写 `memblaze_vio.bin`），确认后即可复现上表 ① 的成功路径。
 
-> 快速再试命令（保持 GUI 连接状态）：
+> 快速再试命令（GUI，打开 SPI-core 工程后）：
 > ```tcl
 > set JTAG_FREQ 6000000
 > source dist/program_flash.tcl
