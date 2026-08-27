@@ -109,4 +109,4 @@ if {$ltx_src ne ""} {
 puts "=== DONE. Bitstream: $bit_src"
 puts "=== Flash image: run scripts/gen_flash_bin.tcl"
 puts "=== Hardware: program dist/$proj_name.bit (+ .ltx for hw_vio),
-       or burn dist/$proj_name.bin into the SPI flash (see FLASH_BURN_GUIDE.md)."
+       or burn dist/$proj_name.bin into the SPI flash (see dist/FLASH_BURN_GUIDE.md)."

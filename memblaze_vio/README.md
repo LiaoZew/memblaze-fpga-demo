@@ -76,7 +76,7 @@ D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat -mode batch -source scripts\creat
 |---|---|
 | `memblaze_vio.bit` | JTAG 在线下载（Vivado Hardware Manager → Program Device） |
 | `memblaze_vio.ltx` | VIO 调试探针文件（Hardware Manager 中关联后即可看到 `vio_0` 窗口，控制 probe_out0/1/2 → 3 个 LED；必须与 .bit 同编译产物配套） |
-| `memblaze_vio.bin` | SPIx4 flash 烧录镜像（上电自启动，烧录步骤见仓库根目录 `FLASH_BURN_GUIDE.md`） |
+| `memblaze_vio.bin` | SPIx4 flash 烧录镜像（上电自启动，烧录步骤见 `dist/FLASH_BURN_GUIDE.md`） |
 
 ### 使用步骤（JTAG 方式，最快）
 

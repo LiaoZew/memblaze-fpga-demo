@@ -3,7 +3,7 @@
 无需重新编译，可直接烧录到 MemBlaze 板（xc7k325tffg900-2）使用。
 
 **命名约定**：每工程一套产物，以工程名区分：`dist/<工程名>.bit / .ltx / .bin`。
-本工程：**memblaze_vio**。烧录 flash 的完整步骤见仓库根目录 [`FLASH_BURN_GUIDE.md`](../FLASH_BURN_GUIDE.md)。
+本工程：**memblaze_vio**。烧录 flash 的完整步骤见本目录 [`FLASH_BURN_GUIDE.md`](FLASH_BURN_GUIDE.md)。
 
 | 文件 | 用途 |
 |---|---|
