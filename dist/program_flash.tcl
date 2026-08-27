@@ -3,41 +3,32 @@
 #
 # Flash on the board: Micron N25Q256A13EF804F (256 Mb = 32 MB, 3.3 V, SPI)
 #   Vivado cfgmem part (2024.2): mt25ql256-spi-x1_x2_x4
-#   (Micron renamed N25Q -> MT25Q; older Vivado: n25q256-3.3v-spi-x1_x2_x4)
 #
-# IMPORTANT - proven flow on this board (verified on hardware):
-#   The SPI flash is on USER I/O pins, so it can ONLY be accessed through a
-#   PROGRAMMED design that exposes an SPI core to the JTAG debug chain.
-#   Vivado reports that as "design has 1 SPI core(s)". The flow:
-#      1. program the device with a bitstream whose design contains an SPI
-#         core (e.g. another project with an SPI controller on this board)
-#      2. associate the matching .ltx probes file
-#      3. program the flash through the design's SPI bridge
-#   A design WITHOUT an SPI core (e.g. this VIO demo) CANNOT be used for
-#   flash programming ("Failure to set flash parameters").
-#
-#   In the Vivado GUI, open the SPI-core project first so that
-#   PROGRAM.HW_CFGMEM_BITFILE / PROBES.FILE are populated automatically;
-#   this script uses them when present. In batch mode, pass DESIGN_BIT.
+# PROVEN MECHANISM (verified on this board):
+#   The SPI flash lives on user I/O pins, so Vivado programs it by first
+#   loading a PREBUILT SPI-bridge bitstream into the FPGA:
+#       <vivado>/data/xicom/cfgmem/bitfile/spi_<part>_pullnone.bit
+#   (e.g. .../spi_xc7k325t_pullnone.bit - the name is chosen from the
+#    JTAG-scanned device part; _pullnone matches
+#    PROGRAM.UNUSED_PIN_TERMINATION {pull-none}).
+#   Log then shows: "design has 1 SPI core(s)", and program_hw_cfgmem works.
 #
 # Image: <this script's folder>/memblaze_vio.bin
 #        (SPIx4, uncompressed bitstream ~11 MB, starting at flash address 0x0)
 #
 # Usage:
 #   Option A - batch (no GUI):
-#       set DESIGN_BIT D:/x/design_with_spi.bit      (design that has an SPI core)
 #       vivado -mode batch -source program_flash.tcl
-#   Option B - Vivado GUI, Hardware Manager (recommended):
-#       open the SPI-core project -> connect target -> Tcl Console:
+#   Option B - Vivado GUI, Hardware Manager -> Tcl Console:
 #       source program_flash.tcl
 #
 # Optional overrides (set BEFORE sourcing; env-var or plain Tcl var):
-#   set DESIGN_BIT D:/x/design.bit       ;# bitstream WITH an SPI core
-#   set BIN        D:/x/another.bin      ;# use a different .bin
+#   set DESIGN_BIT D:/x/design.bit        ;# override the SPI-bridge bit
+#   set BIN        D:/x/another.bin       ;# use a different .bin
 #   set FLASH_PART mt25ql256-spi-x1_x2_x4 ;# different cfgmem part
 #   set TARGET     */xilinx_tcf/Digilent/2102...A ;# pick the JTAG target
-#   set JTAG_FREQ  6000000               ;# lower JTAG clock
-#   set ONLY_VERIFY 1                    ;# skip erase/program, verify only
+#   set JTAG_FREQ  6000000                ;# lower JTAG clock
+#   set ONLY_VERIFY 1                     ;# skip erase/program, verify only
 #==============================================================================
 
 # ---- configuration -----------------------------------------------------------
@@ -47,25 +38,50 @@ proc getopt {name default} {
     return $default
 }
 
+# locate the Vivado install root (env var, or walk up from the executable)
+proc find_vivado_root {} {
+    if {[info exists ::env(XILINX_VIVADO)] && $::env(XILINX_VIVADO) ne ""} {
+        return [file normalize $::env(XILINX_VIVADO)]
+    }
+    set dir [file dirname [file normalize [info nameofexecutable]]]
+    while {1} {
+        if {[file exists [file join $dir data xicom cfgmem bitfile.zip]]} { return $dir }
+        set parent [file dirname $dir]
+        if {$parent eq $dir} { return "" }
+        set dir $parent
+    }
+}
+
+# the prebuilt bridge bits ship zipped (bitfile.zip); extract the one we need
+proc ensure_bridge_bit {design_bit} {
+    if {[file exists $design_bit]} { return $design_bit }
+    set cfgmem_dir [file normalize [file dirname [file dirname $design_bit]]]
+    set zip_file   [file join $cfgmem_dir bitfile.zip]
+    if {![file exists $zip_file]} { return "" }
+    file mkdir [file dirname $design_bit]
+    set entry "bitfile/[file tail $design_bit]"
+    set z $zip_file
+    set d $design_bit
+    set e $entry
+    set cmd "Add-Type -AssemblyName System.IO.Compression.FileSystem; \$z=\[System.IO.Compression.ZipFile\]::OpenRead('$z'); \$e=\$z.GetEntry('$e'); \[System.IO.Compression.ZipFileExtensions\]::ExtractToFile(\$e,'$d',\$true); \$z.Dispose()"
+    catch {exec powershell -NoProfile -Command $cmd} msg
+    if {[file exists $design_bit]} {
+        puts "Extracted bridge bit from $zip_file"
+        return $design_bit
+    }
+    puts "Extraction failed: $msg"
+    return ""
+}
+
 set script_dir [file dirname [file normalize [info script]]]
 set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
-set design_bit  [getopt DESIGN_BIT ""]
+set design_bit  [getopt DESIGN_BIT {}]
 set flash_part  [getopt FLASH_PART {mt25ql256-spi-x1_x2_x4}]
 set target      [getopt TARGET     {}]
 set jtag_freq   [getopt JTAG_FREQ  {}]
 set only_verify [expr {[getopt ONLY_VERIFY 0] eq "1"}]
 
 if {![file exists $bin_file]} { error "Image file not found: $bin_file" }
-
-# locate the cfgmem part; give useful candidates if the name is wrong
-set part_obj [lindex [get_cfgmem_parts $flash_part] 0]
-if {$part_obj eq ""} {
-    set candidates [lsort -unique [get_cfgmem_parts {*256*}]]
-    puts "ERROR: no cfgmem part matches '$flash_part'."
-    puts "Try one of these 256 Mb SPI parts:"
-    puts [join $candidates "\n"]
-    error "cfgmem part '$flash_part' not found"
-}
 
 # ---- connect to the JTAG target ---------------------------------------------
 open_hw_manager
@@ -86,22 +102,42 @@ if {$jtag_freq ne ""} {
     puts "JTAG frequency set to $jtag_freq Hz"
 }
 
-# ---- resolve the design bit (must contain an SPI core for flash access) ------
+# ---- resolve the SPI-bridge bit from the JTAG-scanned part -------------------
 if {$design_bit eq ""} {
-    set design_bit [get_property PROGRAM.HW_CFGMEM_BITFILE $hw_dev]
+    set part [get_property PART $hw_dev]
+    set vivado_root [find_vivado_root]
+    if {$vivado_root eq ""} {
+        error "Cannot locate the Vivado install (set XILINX_VIVADO or DESIGN_BIT)"
+    }
+    set design_bit [file join $vivado_root data xicom cfgmem bitfile "spi_${part}_pullnone.bit"]
+    puts "Vivado root: $vivado_root"
 }
-if {$design_bit eq ""} {
-    # fall back to the demo bit - flashes a clear warning that it has no SPI core
-    set design_bit [file join $script_dir memblaze_vio.bit]
+if {![file exists $design_bit]} {
+    set design_bit [ensure_bridge_bit $design_bit]
 }
-if {![file exists $design_bit]} { error "Design bitstream not found: $design_bit" }
-puts "design bit: $design_bit"
+if {![file exists $design_bit]} {
+    puts "ERROR: SPI-bridge bit not found: $design_bit"
+    puts "It should come from <vivado>/data/xicom/cfgmem/bitfile.zip "
+    puts "(entry bitfile/spi_<part>_pullnone.bit)."
+    error "SPI-bridge bitstream not found"
+}
+puts "SPI-bridge bit: $design_bit"
 
-# associate the probes file (same folder as the bit, same base name) if present
+# (optional) associate probes if the chosen bit has a .ltx next to it
 set ltx_file [string map {.bit .ltx} $design_bit]
 if {[file exists $ltx_file]} {
     set_property PROBES.FILE $ltx_file $hw_dev
     puts "probes file: $ltx_file"
+}
+
+# ---- cfgmem part lookup ------------------------------------------------------
+set part_obj [lindex [get_cfgmem_parts $flash_part] 0]
+if {$part_obj eq ""} {
+    set candidates [lsort -unique [get_cfgmem_parts {*256*}]]
+    puts "ERROR: no cfgmem part matches '$flash_part'."
+    puts "Try one of these 256 Mb SPI parts:"
+    puts [join $candidates "\n"]
+    error "cfgmem part '$flash_part' not found"
 }
 
 # ---- bind the configuration memory device (reuse if already bound) -----------
@@ -132,8 +168,8 @@ if {$only_verify} {
     set_property PROGRAM.VERIFY       1 $cfgmem
 }
 
-# ---- program the device (SPI-bridge design), THEN program the flash ----------
-puts "--- program device with the SPI-core design ---"
+# ---- program the device with the SPI-bridge bit, then program the flash ------
+puts "--- program device with the SPI-bridge design ---"
 create_hw_bitstream -hw_device $hw_dev $design_bit
 program_hw_devices $hw_dev
 refresh_hw_device -update_hw_probes true $hw_dev
@@ -142,12 +178,12 @@ puts "--- program_hw_cfgmem (erase / blank check / program / verify) ---"
 if {[catch {program_hw_cfgmem -hw_cfgmem $cfgmem} err]} {
     puts "----------------------------------------------------------------------"
     puts "ERROR: flash programming failed: $err"
+    puts "Expect to see 'design has 1 SPI core(s)' in the log above."
     puts "Troubleshooting (details in FLASH_BURN_GUIDE.md, section 5.1):"
-    puts "  1. The design bit MUST contain an SPI core - check the log for"
-    puts "     'design has 1 SPI core(s)'. The VIO demo bit has NO SPI core."
-    puts "  2. In the GUI: open the SPI-core project first, then source this script."
-    puts "  3. Batch: set DESIGN_BIT <path to the SPI-core .bit>"
-    puts "  4. Lower JTAG clock if unstable: set JTAG_FREQ 6000000"
+    puts "  1. SPI-bridge bit: auto-resolved from the scanned part; verify"
+    puts "     spi_<part>_pullnone.bit exists under data/xicom/cfgmem/bitfile/"
+    puts "  2. Lower JTAG clock if unstable: set JTAG_FREQ 6000000"
+    puts "  3. Verify part name: mt25ql256-spi-x1_x2_x4 (3.3 V), not mt25qu (1.8 V)"
     puts "----------------------------------------------------------------------"
     error $err
 }

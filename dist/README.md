@@ -15,12 +15,13 @@
 
 ## 快速开始
 
-**A. 烧录 flash（上电自启动，推荐）**
+**A. 烧录 flash（上电自启动，推荐，已实机验证）**
 
 ```
 vivado -mode batch -source program_flash.tcl
-# 或 Hardware Manager -> Tcl Console -> source program_flash.tcl
-# 完成后断电重启，板卡从 SPI flash 自举
+# 脚本按 JTAG 扫描到的器件型号，自动定位/解压 Vivado 自带的 SPI 网桥 bit
+# （data/xicom/cfgmem/bitfile/spi_xc7k325t_pullnone.bit）后完成
+# 擦除 -> 编程 -> 校验（约 8~9 分钟），完成后断电重启即从 flash 自举
 ```
 
 **B. JTAG 在线调试（不烧 flash）**
