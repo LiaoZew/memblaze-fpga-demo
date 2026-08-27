@@ -62,6 +62,7 @@ source dist/program_flash.tcl
 | `BIN` | 换用其它 bin | `set BIN D:/x/another.bin` |
 | `FLASH_PART` | 换用其它 flash | `set FLASH_PART mt25ql256-spi-x1_x2_x4` |
 | `TARGET` | JTAG 链上有多个目标时指定 | `set TARGET */xilinx_tcf/Digilent/1234...A` |
+| `JTAG_FREQ` | 降低 JTAG 时钟（信号完整性，见 5.1） | `set JTAG_FREQ 6000000` |
 | `ONLY_VERIFY` | 只校验不烧写（产线复查） | `set ONLY_VERIFY 1` |
 
 注意事项：
@@ -107,6 +108,27 @@ source dist/program_flash.tcl
 | hw_vio 看不到探针 | `.ltx` 与 `.bit` 不是同一编译产物 → 使用 `dist/` 同名的 `.bit/.ltx` 配对 |
 | 想恢复 JTAG 优先 | 上电时短接相应配置跳线强制 JTAG 模式，或重新烧录正确镜像 |
 | 产物被覆盖 | 严格遵守命名约定 `dist/<工程名>.bit/.ltx/.bin`，每工程一套，勿混用 |
+
+### 5.1 `program_hw_cfgmem` 报错：`Flash Programming Unsuccessful: Failure to set flash parameters`
+
+7 系列通过 JTAG 间接烧录 SPI flash 时的典型错误，出现时机是 `program_hw_cfgmem` 执行阶段
+（此前 cfgmem 绑定、文件加载都已成功）。按下面的优先级排查：
+
+| 排查项 | 操作 |
+|---|---|
+| ① JTAG 时钟过高（最常见） | 降低 JTAG 频率后重跑：`set JTAG_FREQ 6000000`（仍不行用 3000000）再 `source dist/program_flash.tcl` |
+| ② FPGA 未处于未配置态 | 间接烧录要求 **DONE=0**（日志中应出现 `Device ... is not programmed (DONE status = 0)`）。若提示 DONE=1，先对器件执行 `program_hw_devices -clear` 或断电重上电 |
+| ③ 器件名与硅片不匹配 | 在 GUI 用 **Add Configuration Memory Device** 手工核对列表中 `mt25ql256-spi-x1_x2_x4` 是否存在；确认芯片是 3.3 V（丝印含 `13E`），勿用 1.8 V 的 `mt25qu256-*` |
+| ④ flash 供电/电平 | 确认 flash 的 3.3 V 电源、VIO 与 FPGA bank-0 配置电压一致（CFGBVS）；用万用表确认 CCLK / FCS_B / D[3:0] 到 flash 的连接与上拉电阻正常 |
+| ⑤ WP#/HOLD# 引脚 | 写保护失效会导致参数写不进去：确认 **WP#（写保护）上拉到 VCC**、HOLD# 上拉（或按板卡原理图处理），排除浮空/接地 |
+| ⑥ 接触与干扰 | 更换/插紧 JTAG 线与排针（TDO G10 / TDI H10 / TMS F10 / TCK E10），远离干扰源；拔掉其它 JTAG 链设备 |
+| ⑦ 换 GUI 流验证 | 用方法二（GUI 图形界面）跑一次同样的擦除/编程/校验：若 GUI 成功而脚本失败，多半是脚本属性差异，把 GUI 生成的 Tcl 日志发回来对照 |
+
+> 快速再试命令（保持 GUI 连接状态）：
+> ```tcl
+> set JTAG_FREQ 6000000
+> source dist/program_flash.tcl
+> ```
 
 ---
 

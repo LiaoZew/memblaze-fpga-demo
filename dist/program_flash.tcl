@@ -20,6 +20,7 @@
 #   set BIN        D:/x/another.bin       ;# use a different .bin
 #   set FLASH_PART mt25ql256-spi-x1_x2_x4 ;# different cfgmem part
 #   set TARGET     */xilinx_tcf/Digilent/2102...A ;# pick the JTAG target
+#   set JTAG_FREQ  6000000                ;# lower JTAG clock (signal integrity)
 #   set ONLY_VERIFY 1                     ;# skip erase/program, verify only
 #==============================================================================
 
@@ -34,6 +35,7 @@ set script_dir [file dirname [file normalize [info script]]]
 set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
 set flash_part  [getopt FLASH_PART {mt25ql256-spi-x1_x2_x4}]
 set target      [getopt TARGET     {}]
+set jtag_freq   [getopt JTAG_FREQ  {}]
 set only_verify [expr {[getopt ONLY_VERIFY 0] eq "1"}]
 
 if {![file exists $bin_file]} {
@@ -71,6 +73,12 @@ puts "target: [get_property NAME [current_hw_target]]"
 puts "device: [get_property NAME $hw_dev]  (part [get_property PART $hw_dev])"
 refresh_hw_device -update_hw_probes false $hw_dev
 
+# lower JTAG clock if requested (fixes intermittent flash access failures)
+if {$jtag_freq ne ""} {
+    catch {set_property PARAM.FREQUENCY $jtag_freq [current_hw_target]}
+    puts "JTAG frequency set to $jtag_freq Hz"
+}
+
 # ---- bind the configuration memory device (reuse if already bound) -----------
 set cfgmem ""
 catch {set cfgmem [current_hw_cfgmem]}
@@ -98,6 +106,19 @@ if {$only_verify} {
 }
 
 # ---- program -----------------------------------------------------------------
-program_hw_cfgmem $cfgmem
+if {[catch {program_hw_cfgmem $cfgmem} err]} {
+    puts "----------------------------------------------------------------------"
+    puts "ERROR: flash programming failed: $err"
+    puts "Troubleshooting (details in FLASH_BURN_GUIDE.md, section 5.1):"
+    puts "  1. Lower the JTAG clock, then re-source this script:"
+    puts "       set JTAG_FREQ 6000000     (or 3000000 )"
+    puts "  2. Verify the flash part in the GUI: Hardware Manager ->"
+    puts "     Add Configuration Memory Device -> mt25ql256-spi-x1_x2_x4"
+    puts "  3. Check flash wiring/level: 3.3 V supply, WP#/HOLD# pulled up,"
+    puts "     CCLK/FCS_B/D0-D3 to the flash, bank-0 CFGBVS voltage matches"
+    puts "  4. Make sure the FPGA is unprogrammed (DONE=0, as shown above)"
+    puts "----------------------------------------------------------------------"
+    error $err
+}
 puts "=== Flash programming completed (erase / blank check / program / verify) ==="
 puts "=== Power-cycle the board - it will now boot from the SPI flash. ==="
