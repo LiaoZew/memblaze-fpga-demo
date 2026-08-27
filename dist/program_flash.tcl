@@ -11,6 +11,10 @@
 #   (e.g. .../spi_xc7k325t_pullnone.bit - the name is chosen from the
 #    JTAG-scanned device part; _pullnone matches
 #    PROGRAM.UNUSED_PIN_TERMINATION {pull-none}).
+#   NOTE: these files are NOT stored loose on disk. They live inside
+#   <vivado>/data/xicom/cfgmem/bitfile.zip and are streamed from the
+#   archive through a VIRTUAL path - no extraction is needed and `file
+#   exists` will report false for them. (Verified on hardware.)
 #   Log then shows: "design has 1 SPI core(s)", and program_hw_cfgmem works.
 #
 # Image: <this script's folder>/memblaze_vio.bin
@@ -52,27 +56,6 @@ proc find_vivado_root {} {
     }
 }
 
-# the prebuilt bridge bits ship zipped (bitfile.zip); extract the one we need
-proc ensure_bridge_bit {design_bit} {
-    if {[file exists $design_bit]} { return $design_bit }
-    set cfgmem_dir [file normalize [file dirname [file dirname $design_bit]]]
-    set zip_file   [file join $cfgmem_dir bitfile.zip]
-    if {![file exists $zip_file]} { return "" }
-    file mkdir [file dirname $design_bit]
-    set entry "bitfile/[file tail $design_bit]"
-    set z $zip_file
-    set d $design_bit
-    set e $entry
-    set cmd "Add-Type -AssemblyName System.IO.Compression.FileSystem; \$z=\[System.IO.Compression.ZipFile\]::OpenRead('$z'); \$e=\$z.GetEntry('$e'); \[System.IO.Compression.ZipFileExtensions\]::ExtractToFile(\$e,'$d',\$true); \$z.Dispose()"
-    catch {exec powershell -NoProfile -Command $cmd} msg
-    if {[file exists $design_bit]} {
-        puts "Extracted bridge bit from $zip_file"
-        return $design_bit
-    }
-    puts "Extraction failed: $msg"
-    return ""
-}
-
 set script_dir [file dirname [file normalize [info script]]]
 set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
 set design_bit  [getopt DESIGN_BIT {}]
@@ -111,17 +94,13 @@ if {$design_bit eq ""} {
     }
     set design_bit [file join $vivado_root data xicom cfgmem bitfile "spi_${part}_pullnone.bit"]
     puts "Vivado root: $vivado_root"
+    # NOTE: the file may not exist physically - it is streamed from bitfile.zip
+    # via a virtual path, so NO existence check / extraction is performed here.
+    if {![file exists [file join $vivado_root data xicom cfgmem bitfile.zip]]} {
+        error "SPI-bridge bit archive not found: <vivado>/data/xicom/cfgmem/bitfile.zip"
+    }
 }
-if {![file exists $design_bit]} {
-    set design_bit [ensure_bridge_bit $design_bit]
-}
-if {![file exists $design_bit]} {
-    puts "ERROR: SPI-bridge bit not found: $design_bit"
-    puts "It should come from <vivado>/data/xicom/cfgmem/bitfile.zip "
-    puts "(entry bitfile/spi_<part>_pullnone.bit)."
-    error "SPI-bridge bitstream not found"
-}
-puts "SPI-bridge bit: $design_bit"
+puts "SPI-bridge bit (virtual, from bitfile.zip if not overridden): $design_bit"
 
 # (optional) associate probes if the chosen bit has a .ltx next to it
 set ltx_file [string map {.bit .ltx} $design_bit]
@@ -170,9 +149,16 @@ if {$only_verify} {
 
 # ---- program the device with the SPI-bridge bit, then program the flash ------
 puts "--- program device with the SPI-bridge design ---"
-create_hw_bitstream -hw_device $hw_dev $design_bit
-program_hw_devices $hw_dev
-refresh_hw_device -update_hw_probes true $hw_dev
+if {[catch {
+    create_hw_bitstream -hw_device $hw_dev $design_bit
+    program_hw_devices $hw_dev
+    refresh_hw_device -update_hw_probes true $hw_dev
+} err]} {
+    puts "ERROR: could not load the SPI-bridge bit: $err"
+    puts "Check that the Vivado install has data/xicom/cfgmem/bitfile.zip"
+    puts "with an entry bitfile/spi_<part>_pullnone.bit for part [get_property PART $hw_dev]"
+    error $err
+}
 
 puts "--- program_hw_cfgmem (erase / blank check / program / verify) ---"
 if {[catch {program_hw_cfgmem -hw_cfgmem $cfgmem} err]} {

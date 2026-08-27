@@ -58,8 +58,7 @@ source dist/program_flash.tcl
 ```text
 连接 JTAG（扫描出器件型号）
  -> 按型号自动定位 SPI 网桥 bit：<Vivado安装>/data/xicom/cfgmem/bitfile/
-    spi_<器件型号>_pullnone.bit（如 spi_xc7k325t_pullnone.bit；文件缺失时
-    自动从同目录 bitfile.zip 单文件解压）——日志应出现
+    spi_<器件型号>_pullnone.bit（如 spi_xc7k325t_pullnone.bit）——日志应出现
     "design has 1 SPI core(s)"
  -> 绑定 cfgmem（mt25ql256-spi-x1_x2_x4）
  -> 擦除 -> 空白检查 -> 编程 -> 校验（全程约 8~9 分钟）
@@ -67,8 +66,11 @@ source dist/program_flash.tcl
 ```
 
 > **关键机制（已实测验证）**：该板 SPI flash 接在 FPGA 的**用户 IO**上，Vivado 通过
-> 先加载官方预置的 **SPI 网桥 bit**（`data/xicom/cfgmem/bitfile.zip` 内按器件型号
-> 提供的 `spi_<part>_pullnone.bit`）来访问 flash。脚本已自动完成“定位/解压/加载”。
+> 先加载官方预置的 **SPI 网桥 bit** 来访问 flash。
+> **为什么不需要解压**：这些网桥 bit 并不以真实文件存在，而是打包在
+> `<Vivado>/data/xicom/cfgmem/bitfile.zip` 里，Vivado 把 `.../bitfile/spi_<part>_pullnone.bit`
+> 当作**虚拟路径**直接流式读取对应条目（实测：磁盘上无该文件也能加载成功；
+> 用 `file exists` 查会是 false，属正常）。脚本直接传递虚拟路径即可，无需解压。
 > 网桥 bit 的 `_pullnone` 与烧录属性 `PROGRAM.UNUSED_PIN_TERMINATION {pull-none}` 对应
 > （若改 pull-up 需用 `spi_<part>_pullup.bit`）。
 

@@ -19,9 +19,9 @@
 
 ```
 vivado -mode batch -source program_flash.tcl
-# 脚本按 JTAG 扫描到的器件型号，自动定位/解压 Vivado 自带的 SPI 网桥 bit
-# （data/xicom/cfgmem/bitfile/spi_xc7k325t_pullnone.bit）后完成
-# 擦除 -> 编程 -> 校验（约 8~9 分钟），完成后断电重启即从 flash 自举
+# 脚本按 JTAG 扫描到的器件型号，自动使用 Vivado 自带的 SPI 网桥 bit
+# （data/xicom/cfgmem/bitfile.zip 的虚拟路径直接读取，无需解压），然后
+# 完成 擦除 -> 编程 -> 校验（约 8~9 分钟），完成后断电重启即从 flash 自举
 ```
 
 **B. JTAG 在线调试（不烧 flash）**
