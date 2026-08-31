@@ -47,24 +47,32 @@ D:\xilinx\rundir3\Vitis\2024.2\bin\xsct.bat mb_led\scripts\build_elf.tcl
 
 产出 `dist/mb_led.elf`（standalone 程序：AXI GPIO 依次点亮/熄灭 LED）。
 
+## 合并 ELF 进 bitstream（让软核上电就能跑）
+
+```text
+D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat -mode batch -source mb_led/scripts/merge_elf.tcl
+```
+
+`updatemem` 把 ELF 的 BRAM 初始化数据合并进 bitstream，再重新生成 flash 镜像。
+**这步之后** `dist/mb_led.bit / .bin` 就自带软核程序，烧录/下载后 LED 直接闪烁，
+不再需要单独 `dow`。
+
 ## 下载运行
 
-1. **烧硬件**：`vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin`（把软核工程镜像烧入 flash）
-   或 Hardware Manager → Program Device 选 `dist/mb_led.bit`（JTAG，调试用）。
-2. **下软核程序**（xsdb / xsct Tcl）：
-   ```tcl
-   connect
-   target
-   targets -set -filter {name =~ "*MicroBlaze*"}
-   rst -processor
-   dow dist/mb_led.elf
-   con
-   ```
-   LED 开始按 main.c 的模式闪烁（G+Y+R → 灭 → G+R）。
+1. **烧 flash（软核程序已内嵌）**：
+   `vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin`
+   （如果只想 JTAG 调试：Program Device 选 `dist/mb_led.bit` 即可立即运行）
+2. 断电重启（MODE=SPI），MicroBlaze 启动并控制 LED 闪烁
+   （三灯全亮 → 全灭 → G+R，循环，见 `src/main.c`）。
 
-> 说明：`mb_led.bin`（冷启动硬件）不包含软核程序；工程上电后 MicroBlaze 需
-> 从外部加载程序（JTAG/调试），或后续在 main.c 里加 XIP/Bootloop 方案，
-> 也可用 `updatemem` 把 ELF 合并进 BRAM 后生成自启动 bit。
+> 如果用未合并的 bit/bin（仅硬件），需要再经 xsct 下载程序：
+> ```tcl
+> connect
+> targets -set -filter {name =~ "*MicroBlaze*"}
+> rst -processor
+> dow dist/mb_led.elf
+> con
+> ```
 
 ## 寄存器（AXI 接口）
 

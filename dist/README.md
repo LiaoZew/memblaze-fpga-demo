@@ -19,10 +19,13 @@ MicroBlaze + AXI GPIO 软核工程（见 `mb_led/README.md`）：
 
 | 文件 | 说明 |
 |---|---|
-| `mb_led.bit` | MicroBlaze 硬件 bitstream（AXI GPIO 控制 3 LED） |
-| `mb_led.bin` | SPIx4 flash 镜像（硬件自启动；软核程序经 xsct/Vitis 下载，见 `mb_led/README.md`） |
-| `mb_led.elf` | 软核程序（standalone，LED 闪烁演示） |
+| `mb_led.bit` | MicroBlaze 硬件 bitstream，**已内嵌 ELF**（AXI GPIO 控制 3 LED，上电即运行） |
+| `mb_led.bin` | SPIx4 flash 镜像，**已内嵌 ELF**（烧录后断电重启软核自动跑起来） |
+| `mb_led.elf` | 软核程序源文件（standalone，LED 闪烁演示；由 `mb_led/scripts/build_elf.tcl` 编译） |
 | 无 `.ltx` | MicroBlaze 调试走 MDM 专用 JTAG 口，不需要探针文件（正常） |
+
+> 合并流程：`mb_led/scripts/merge_elf.tcl`（updatemem）把 ELF 合进 bit/bin，所以
+> dist 里的 mb_led 产物**自带程序**，无需再单独下载 ELF。
 
 ## 快速开始
 
