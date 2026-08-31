@@ -47,11 +47,38 @@ D:\xilinx\rundir3\Vitis\2024.2\bin\xsct.bat mb_led\scripts\build_elf.tcl
 
 产出 `dist/mb_led.elf`（standalone 程序：AXI GPIO 依次点亮/熄灭 LED）。
 
-## 合并 ELF 进 bitstream（让软核上电就能跑）
+## JTAG UART 串口调试（控制 LED）
+
+软核通过 **MDM 内置的 JTAG UART**（USB-JTAG 虚拟串口，无需板载 UART 引脚）收发命令。
+程序启动后打印提示并等待命令：
+
+| 命令 | 作用 |
+|---|---|
+| `0`~`7` | 直接设置 LED[2:0]（bit0=G、bit1=Y、bit2=R），如 `5`=G+R 亮 |
+| `G` / `Y` / `R` | 单独切换 绿 / 黄 / 红 |
+| `h` | 打印帮助 |
+
+**打开串口终端**（任选其一）：
+
+```text
+# xsct 命令行（推荐，无需 IDE）
+D:\xilinx\rundir3\Vitis\2024.2\bin\xsct.bat
+xsct% connect
+xsct% jtagterminal        ← 进入 JTAG UART 终端，按键即发（Ctrl+] 退出）
+
+# 或 Vitis IDE：菜单 Xilinx → Launch Serial Terminal，选择 JTAG UART
+```
+
+终端里输入 `5` → 绿+红亮；输入 `7` → 三灯全亮；`0` → 全灭。
+
+> 说明：`jtagterminal` 交互终端收发字符；程序方式可用 `readjtaguart`/`writejtaguart`
+> （xsct 命令，可脚本化控制 LED）。
 
 ```text
 D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat -mode batch -source mb_led/scripts/merge_elf.tcl
 ```
+
+## 合并 ELF 进 bitstream（让软核上电就能跑）
 
 `updatemem` 把 ELF 的 BRAM 初始化数据合并进 bitstream，再重新生成 flash 镜像。
 **这步之后** `dist/mb_led.bit / .bin` 就自带软核程序，烧录/下载后 LED 直接闪烁，
@@ -88,6 +115,13 @@ vivado -mode batch -source mb_led/scripts/create_project.tcl
 
 # 软件：编译 ELF
 xsct.bat mb_led/scripts/build_elf.tcl
+
+# 合并 ELF 进 bit/bin（上电自跑）
+vivado -mode batch -source mb_led/scripts/merge_elf.tcl
+
+# 烧录 / 串口终端
+vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin
+xsct -> connect -> jtagterminal    （输入 0~7 / G / Y / R 控制 LED）
 
 # 调试下载（xsdb）
 connect / targets / rst -processor / dow dist/mb_led.elf / con

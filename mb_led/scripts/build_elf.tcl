@@ -28,7 +28,21 @@ app create -name led_app -platform mb_led_platform -domain standalone_domain \
            -template "Empty Application"
 file copy -force [file join $root src main.c] [file join $ws_dir led_app src main.c]
 
+# first app build generates the Debug makefile tree (and usually the ELF);
+# if the ELF is still missing, force the link with 'make all' (xsct's
+# 'app build' may only rebuild the BSP on subsequent runs)
 app build -name led_app
+set app_elf [file join $ws_dir led_app Debug led_app.elf]
+if {![file exists $app_elf]} {
+    set app_debug_dir [file join $ws_dir led_app Debug]
+    cd $app_debug_dir
+    if {[catch {exec make all 2>@1} make_out]} {
+        puts "app build output: $make_out"
+        error "application build failed"
+    }
+    puts "app build (make all): OK"
+}
+if {![file exists $app_elf]} { error "no ELF produced" }
 
 # publish the ELF next to the other artifacts
 set elf_src [file join $ws_dir led_app Debug led_app.elf]

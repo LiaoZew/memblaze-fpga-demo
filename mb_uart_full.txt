@@ -1,0 +1,1315 @@
+﻿
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Mon Aug 31 22:42:59 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source {D:\work2026\ai\opencode\memblaze_demo\mb_led\scripts\create_project.tcl} -notrace
+=== MemBlaze MicroBlaze project: mb_led (part xc7k325tffg900-2) ===
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 642.613 ; gain = 200.336
+Wrote  : <D:\work2026\ai\opencode\memblaze_demo\mb_led\projects\mb_led.srcs\sources_1\bd\system\system.bd> 
+INFO: [Device 21-403] Loading part xc7k325tffg900-2
+create_bd_cell: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1098.391 ; gain = 257.754
+apply_bd_automation: Time (s): cpu = 00:00:37 ; elapsed = 00:00:41 . Memory (MB): peak = 1098.395 ; gain = 411.766
+clk_cell=/clk_wiz_1 clk pins: /clk_wiz_1/clk_in1 /clk_wiz_1/clk_out1
+WARNING: [BD 41-395] Exec TCL: all ports/pins are already connected to '/clk_wiz_1_locked'
+vivado.bat : ERROR: [BD 5-4] Error: running connect_bd_net.
+At line:5 char:1
++ & 'D:\xilinx\rundir3\Vivado\2024.2\bin\vivado.bat' -mode batch -notra ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: [BD 5-4]...connect_bd_net.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: [BD 41-1306] The connection to interface pin </axi_gpio_0/gpio_io_o> is being overridden by the user with net <axi_gpio_0_gpio_io_o>. This pin will not be connected as a part of interface connection <GPIO>, and might not recreate the connectivity as expected using the writ_bd_tcl command.
+INFO: [BD 41-3093] Triggering Legacy Auto Assign Algorithm
+Slave segment '/axi_gpio_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4000_0000 [ 64K ]>.
+Slave segment '/mdm_1/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4140_0000 [ 4K ]>.
+clk_domain: system_sysclk, clk_domain_1: system_clk_wiz_1_0_clk_out1, clkDomainValSrc_1: DEFAULT, clk_domain_ctrl: 0
+INFO: [xilinx.com:ip:microblaze:11.0-1] /microblaze_0: Enabling fault tolerance.
+INFO: [xilinx.com:ip:microblaze:11.0-9] /microblaze_0: Setting C_BASE_VECTORS to 0x00000000.
+INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_1 clk_wiz propagate
+INFO: [BD 41-1662] The design 'system.bd' is already validated. Therefore parameter propagation will not be re-run.
+Wrote  : <D:\work2026\ai\opencode\memblaze_demo\mb_led\projects\mb_led.srcs\sources_1\bd\system\system.bd> 
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/sim/system.v
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hdl/system_wrapper.v
+INFO: [Project 1-1716] Could not find the wrapper file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.srcs/sources_1/bd/system/hdl/system_wrapper.v, checking in project .gen location instead.
+INFO: [Vivado 12-12390] Found file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hdl/system_wrapper.v, adding it to Project
+INFO: [BD 41-1662] The design 'system.bd' is already validated. Therefore parameter propagation will not be re-run.
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/sim/system.v
+Verilog Output written to : D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hdl/system_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/lmb_bram .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_axi_periph/xbar .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mdm_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_clk_wiz_1_100M .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_gpio_0 .
+Exporting to file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hw_handoff/system.hwh
+Generated Hardware Definition File D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.hwdef
+INFO: [IP_Flow 19-6930] IPCACHE: runCacheChecks() number of threads = 8
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_axi_gpio_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_clk_wiz_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_dlmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_ilmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_lmb_bram_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_mdm_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_microblaze_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_microblaze_0_axi_periph_imp_xbar_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP system_rst_clk_wiz_1_100M_0
+INFO: [IP_Flow 19-8020] IPCACHE: runCacheChecks() calling threadPool finishWork()
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_axi_gpio_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_clk_wiz_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_ilmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_lmb_bram_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_mdm_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_dlmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_microblaze_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_microblaze_0_axi_periph_imp_xbar_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: system_rst_clk_wiz_1_100M_0
+WARNING: [Vivado 12-7122] Auto Incremental Compile:: No reference checkpoint was found in run synth_1. Auto-incremental flow will not be run, the standard flow will be run instead.
+[Mon Aug 31 22:44:06 2026] Launched system_microblaze_0_axi_periph_imp_xbar_0_synth_1, system_rst_clk_wiz_1_100M_0_synth_1, system_axi_gpio_0_0_synth_1, system_clk_wiz_1_0_synth_1, system_lmb_bram_0_synth_1, system_microblaze_0_0_synth_1, system_dlmb_bram_if_cntlr_0_synth_1, system_ilmb_bram_if_cntlr_0_synth_1, system_dlmb_v10_0_synth_1, system_ilmb_v10_0_synth_1, system_mdm_1_0_synth_1...
+Run output will be captured here:
+system_microblaze_0_axi_periph_imp_xbar_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_microblaze_0_axi_periph_imp_xbar_0_synth_1/runme.log
+system_rst_clk_wiz_1_100M_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_rst_clk_wiz_1_100M_0_synth_1/runme.log
+system_axi_gpio_0_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_axi_gpio_0_0_synth_1/runme.log
+system_clk_wiz_1_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_clk_wiz_1_0_synth_1/runme.log
+system_lmb_bram_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_lmb_bram_0_synth_1/runme.log
+system_microblaze_0_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_microblaze_0_0_synth_1/runme.log
+system_dlmb_bram_if_cntlr_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_dlmb_bram_if_cntlr_0_synth_1/runme.log
+system_ilmb_bram_if_cntlr_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_ilmb_bram_if_cntlr_0_synth_1/runme.log
+system_dlmb_v10_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_dlmb_v10_0_synth_1/runme.log
+system_ilmb_v10_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_ilmb_v10_0_synth_1/runme.log
+system_mdm_1_0_synth_1: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/system_mdm_1_0_synth_1/runme.log
+[Mon Aug 31 22:44:06 2026] Launched synth_1...
+Run output will be captured here: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/runme.log
+launch_runs: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 1122.145 ; gain = 3.777
+[Mon Aug 31 22:44:06 2026] Waiting for synth_1 to finish...
+
+
+*** Running vivado
+    with args -log system_wrapper.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source system_wrapper.tcl
+
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Mon Aug 31 22:51:32 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source system_wrapper.tcl -notrace
+create_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 645.762 ; gain = 204.723
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/xilinx/rundir3/Vivado/2024.2/data/ip'.
+Command: synth_design -top system_wrapper -part xc7k325tffg900-2
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k325t'
+INFO: [Device 21-403] Loading part xc7k325tffg900-2
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 18608
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1387.871 ; gain = 468.660
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'system_wrapper' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hdl/system_wrapper.v:13]
+INFO: [Synth 8-6157] synthesizing module 'system' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:583]
+INFO: [Synth 8-6157] synthesizing module 'system_axi_gpio_0_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_axi_gpio_0_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_axi_gpio_0_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_axi_gpio_0_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'system_clk_wiz_1_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_clk_wiz_1_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_clk_wiz_1_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_clk_wiz_1_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'system_mdm_1_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_mdm_1_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_mdm_1_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_mdm_1_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'Interrupt' of module 'system_mdm_1_0' is unconnected for instance 'mdm_1' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:705]
+WARNING: [Synth 8-7023] instance 'mdm_1' of module 'system_mdm_1_0' has 30 connections declared, but only 29 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:705]
+INFO: [Synth 8-6157] synthesizing module 'system_microblaze_0_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_microblaze_0_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_microblaze_0_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_microblaze_0_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'Interrupt_Ack' of module 'system_microblaze_0_0' is unconnected for instance 'microblaze_0' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:737]
+WARNING: [Synth 8-7023] instance 'microblaze_0' of module 'system_microblaze_0_0' has 52 connections declared, but only 51 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:737]
+INFO: [Synth 8-6157] synthesizing module 'system_microblaze_0_axi_periph_0' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:884]
+INFO: [Synth 8-6157] synthesizing module 'm00_couplers_imp_1RZ0IW6' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:13]
+INFO: [Synth 8-6155] done synthesizing module 'm00_couplers_imp_1RZ0IW6' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:13]
+INFO: [Synth 8-6157] synthesizing module 'm01_couplers_imp_K87I2F' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:128]
+INFO: [Synth 8-6155] done synthesizing module 'm01_couplers_imp_K87I2F' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:128]
+INFO: [Synth 8-6157] synthesizing module 's00_couplers_imp_1LZPV07' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:456]
+INFO: [Synth 8-6155] done synthesizing module 's00_couplers_imp_1LZPV07' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:456]
+INFO: [Synth 8-6157] synthesizing module 'system_microblaze_0_axi_periph_imp_xbar_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_microblaze_0_axi_periph_imp_xbar_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_microblaze_0_axi_periph_imp_xbar_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_microblaze_0_axi_periph_imp_xbar_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'm_axi_awprot' of module 'system_microblaze_0_axi_periph_imp_xbar_0' is unconnected for instance 'xbar' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:1238]
+WARNING: [Synth 8-7071] port 'm_axi_arprot' of module 'system_microblaze_0_axi_periph_imp_xbar_0' is unconnected for instance 'xbar' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:1238]
+WARNING: [Synth 8-7023] instance 'xbar' of module 'system_microblaze_0_axi_periph_imp_xbar_0' has 40 connections declared, but only 38 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:1238]
+INFO: [Synth 8-6155] done synthesizing module 'system_microblaze_0_axi_periph_0' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:884]
+INFO: [Synth 8-6157] synthesizing module 'microblaze_0_local_memory_imp_OGE0N8' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:243]
+INFO: [Synth 8-6157] synthesizing module 'system_dlmb_bram_if_cntlr_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_dlmb_bram_if_cntlr_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_dlmb_bram_if_cntlr_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_dlmb_bram_if_cntlr_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'UE' of module 'system_dlmb_bram_if_cntlr_0' is unconnected for instance 'dlmb_bram_if_cntlr' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:347]
+WARNING: [Synth 8-7071] port 'CE' of module 'system_dlmb_bram_if_cntlr_0' is unconnected for instance 'dlmb_bram_if_cntlr' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:347]
+WARNING: [Synth 8-7023] instance 'dlmb_bram_if_cntlr' of module 'system_dlmb_bram_if_cntlr_0' has 22 connections declared, but only 20 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:347]
+INFO: [Synth 8-6157] synthesizing module 'system_dlmb_v10_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_dlmb_v10_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_dlmb_v10_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_dlmb_v10_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'LMB_Rst' of module 'system_dlmb_v10_0' is unconnected for instance 'dlmb_v10' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:368]
+WARNING: [Synth 8-7023] instance 'dlmb_v10' of module 'system_dlmb_v10_0' has 25 connections declared, but only 24 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:368]
+INFO: [Synth 8-6157] synthesizing module 'system_ilmb_bram_if_cntlr_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_ilmb_bram_if_cntlr_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_ilmb_bram_if_cntlr_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_ilmb_bram_if_cntlr_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'UE' of module 'system_ilmb_bram_if_cntlr_0' is unconnected for instance 'ilmb_bram_if_cntlr' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:393]
+WARNING: [Synth 8-7071] port 'CE' of module 'system_ilmb_bram_if_cntlr_0' is unconnected for instance 'ilmb_bram_if_cntlr' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:393]
+WARNING: [Synth 8-7023] instance 'ilmb_bram_if_cntlr' of module 'system_ilmb_bram_if_cntlr_0' has 22 connections declared, but only 20 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:393]
+INFO: [Synth 8-6157] synthesizing module 'system_ilmb_v10_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_ilmb_v10_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_ilmb_v10_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_ilmb_v10_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'LMB_Rst' of module 'system_ilmb_v10_0' is unconnected for instance 'ilmb_v10' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:414]
+WARNING: [Synth 8-7023] instance 'ilmb_v10' of module 'system_ilmb_v10_0' has 25 connections declared, but only 24 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:414]
+INFO: [Synth 8-6157] synthesizing module 'system_lmb_bram_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_lmb_bram_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_lmb_bram_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_lmb_bram_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'rsta_busy' of module 'system_lmb_bram_0' is unconnected for instance 'lmb_bram' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:439]
+WARNING: [Synth 8-7071] port 'rstb_busy' of module 'system_lmb_bram_0' is unconnected for instance 'lmb_bram' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:439]
+WARNING: [Synth 8-7023] instance 'lmb_bram' of module 'system_lmb_bram_0' has 16 connections declared, but only 14 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:439]
+INFO: [Synth 8-6155] done synthesizing module 'microblaze_0_local_memory_imp_OGE0N8' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:243]
+INFO: [Synth 8-6157] synthesizing module 'system_rst_clk_wiz_1_100M_0' [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_rst_clk_wiz_1_100M_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'system_rst_clk_wiz_1_100M_0' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/.Xil/Vivado-24664-DESKTOP-V4JVHLH/realtime/system_rst_clk_wiz_1_100M_0_stub.v:6]
+WARNING: [Synth 8-7071] port 'peripheral_reset' of module 'system_rst_clk_wiz_1_100M_0' is unconnected for instance 'rst_clk_wiz_1_100M' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:873]
+WARNING: [Synth 8-7071] port 'interconnect_aresetn' of module 'system_rst_clk_wiz_1_100M_0' is unconnected for instance 'rst_clk_wiz_1_100M' [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:873]
+WARNING: [Synth 8-7023] instance 'rst_clk_wiz_1_100M' of module 'system_rst_clk_wiz_1_100M_0' has 10 connections declared, but only 8 given [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:873]
+INFO: [Synth 8-6155] done synthesizing module 'system' (0#1) [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/synth/system.v:583]
+INFO: [Synth 8-6155] done synthesizing module 'system_wrapper' (0#1) [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/hdl/system_wrapper.v:13]
+WARNING: [Synth 8-7129] Port M_ACLK in module s00_couplers_imp_1LZPV07 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M_ARESETN in module s00_couplers_imp_1LZPV07 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ACLK in module s00_couplers_imp_1LZPV07 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ARESETN in module s00_couplers_imp_1LZPV07 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M_ACLK in module m01_couplers_imp_K87I2F is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M_ARESETN in module m01_couplers_imp_K87I2F is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ACLK in module m01_couplers_imp_K87I2F is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ARESETN in module m01_couplers_imp_K87I2F is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M_ACLK in module m00_couplers_imp_1RZ0IW6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M_ARESETN in module m00_couplers_imp_1RZ0IW6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ACLK in module m00_couplers_imp_1RZ0IW6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S_ARESETN in module m00_couplers_imp_1RZ0IW6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M00_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M00_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M01_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M01_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S00_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S00_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1499.102 ; gain = 579.891
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1499.102 ; gain = 579.891
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1499.102 ; gain = 579.891
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 1499.102 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/system_microblaze_0_0/system_microblaze_0_0_in_context.xdc] for cell 'system_i/microblaze_0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/system_microblaze_0_0/system_microblaze_0_0_in_context.xdc] for cell 'system_i/microblaze_0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0/system_dlmb_v10_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/dlmb_v10'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0/system_dlmb_v10_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/dlmb_v10'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_v10_0/system_ilmb_v10_0/system_dlmb_v10_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/ilmb_v10'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_v10_0/system_ilmb_v10_0/system_dlmb_v10_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/ilmb_v10'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/dlmb_bram_if_cntlr'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/dlmb_bram_if_cntlr'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/ilmb_bram_if_cntlr'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/ilmb_bram_if_cntlr'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_lmb_bram_0/system_lmb_bram_0/system_lmb_bram_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/lmb_bram'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_lmb_bram_0/system_lmb_bram_0/system_lmb_bram_0_in_context.xdc] for cell 'system_i/microblaze_0_local_memory/lmb_bram'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_axi_periph_imp_xbar_0/system_microblaze_0_axi_periph_imp_xbar_0/system_microblaze_0_axi_periph_imp_xbar_0_in_context.xdc] for cell 'system_i/microblaze_0_axi_periph/xbar'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_axi_periph_imp_xbar_0/system_microblaze_0_axi_periph_imp_xbar_0/system_microblaze_0_axi_periph_imp_xbar_0_in_context.xdc] for cell 'system_i/microblaze_0_axi_periph/xbar'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0/system_mdm_1_0_in_context.xdc] for cell 'system_i/mdm_1'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0/system_mdm_1_0_in_context.xdc] for cell 'system_i/mdm_1'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0/system_clk_wiz_1_0_in_context.xdc] for cell 'system_i/clk_wiz_1'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0/system_clk_wiz_1_0_in_context.xdc] for cell 'system_i/clk_wiz_1'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0_in_context.xdc] for cell 'system_i/rst_clk_wiz_1_100M'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0_in_context.xdc] for cell 'system_i/rst_clk_wiz_1_100M'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0/system_axi_gpio_0_0_in_context.xdc] for cell 'system_i/axi_gpio_0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0/system_axi_gpio_0_0_in_context.xdc] for cell 'system_i/axi_gpio_0'
+Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/src/mb_led.xdc]
+Finished Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/src/mb_led.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/work2026/ai/opencode/memblaze_demo/mb_led/src/mb_led.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/system_wrapper_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/system_wrapper_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1513.117 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1513.117 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 1513.117 ; gain = 593.906
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k325tffg900-2
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 1513.117 ; gain = 593.906
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property KEEP_HIERARCHY = SOFT for system_i. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_local_memory/dlmb_v10. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_local_memory/ilmb_v10. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_local_memory/dlmb_bram_if_cntlr. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_local_memory/ilmb_bram_if_cntlr. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_local_memory/lmb_bram. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_axi_periph/xbar. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/microblaze_0_axi_periph. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/mdm_1. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/clk_wiz_1. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/rst_clk_wiz_1_100M. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for system_i/axi_gpio_0. (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 1513.117 ; gain = 593.906
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 1513.117 ; gain = 593.906
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 840 (col length:140)
+BRAMs: 890 (col length: RAMB18 140 RAMB36 70)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port M00_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M00_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M01_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port M01_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S00_ACLK in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port S00_ARESETN in module system_microblaze_0_axi_periph_0 is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:22 . Memory (MB): peak = 1513.117 ; gain = 593.906
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:29 ; elapsed = 00:00:30 . Memory (MB): peak = 1668.055 ; gain = 748.844
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:29 ; elapsed = 00:00:30 . Memory (MB): peak = 1668.352 ; gain = 749.141
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:29 ; elapsed = 00:00:30 . Memory (MB): peak = 1678.625 ; gain = 759.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+------------------------------------------+----------+
+|      |BlackBox name                             |Instances |
++------+------------------------------------------+----------+
+|1     |system_axi_gpio_0_0                       |         1|
+|2     |system_clk_wiz_1_0                        |         1|
+|3     |system_mdm_1_0                            |         1|
+|4     |system_microblaze_0_0                     |         1|
+|5     |system_microblaze_0_axi_periph_imp_xbar_0 |         1|
+|6     |system_rst_clk_wiz_1_100M_0               |         1|
+|7     |system_dlmb_bram_if_cntlr_0               |         1|
+|8     |system_dlmb_v10_0                         |         1|
+|9     |system_ilmb_bram_if_cntlr_0               |         1|
+|10    |system_ilmb_v10_0                         |         1|
+|11    |system_lmb_bram_0                         |         1|
++------+------------------------------------------+----------+
+
+Report Cell Usage: 
++------+----------------------------------------+------+
+|      |Cell                                    |Count |
++------+----------------------------------------+------+
+|1     |system_axi_gpio_0                       |     1|
+|2     |system_clk_wiz_1                        |     1|
+|3     |system_dlmb_bram_if_cntlr               |     1|
+|4     |system_dlmb_v10                         |     1|
+|5     |system_ilmb_bram_if_cntlr               |     1|
+|6     |system_ilmb_v10                         |     1|
+|7     |system_lmb_bram                         |     1|
+|8     |system_mdm_1                            |     1|
+|9     |system_microblaze_0                     |     1|
+|10    |system_microblaze_0_axi_periph_imp_xbar |     1|
+|11    |system_rst_clk_wiz_1_100M               |     1|
+|12    |IBUF                                    |     1|
+|13    |OBUF                                    |     3|
++------+----------------------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 7 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:22 ; elapsed = 00:00:31 . Memory (MB): peak = 1895.191 ; gain = 961.965
+Synthesis Optimization Complete : Time (s): cpu = 00:00:34 ; elapsed = 00:00:34 . Memory (MB): peak = 1895.191 ; gain = 975.980
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1896.078 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1902.559 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 2eb92cef
+INFO: [Common 17-83] Releasing license: Synthesis
+52 Infos, 48 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:39 ; elapsed = 00:00:44 . Memory (MB): peak = 1902.559 ; gain = 1236.539
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1902.559 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/synth_1/system_wrapper.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file system_wrapper_utilization_synth.rpt -pb system_wrapper_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Aug 31 22:52:33 2026...
+[Mon Aug 31 22:52:35 2026] synth_1 finished
+wait_on_runs: Time (s): cpu = 00:00:03 ; elapsed = 00:08:29 . Memory (MB): peak = 1122.145 ; gain = 0.000
+SYNTH STATUS: synth_design Complete!
+[Mon Aug 31 22:52:37 2026] Launched impl_1...
+Run output will be captured here: D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/runme.log
+[Mon Aug 31 22:52:37 2026] Waiting for impl_1 to finish...
+
+
+*** Running vivado
+    with args -log system_wrapper.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source system_wrapper.tcl -notrace
+
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Mon Aug 31 22:52:46 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source system_wrapper.tcl -notrace
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 645.117 ; gain = 203.195
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/xilinx/rundir3/Vivado/2024.2/data/ip'.
+Command: link_design -top system_wrapper -part xc7k325tffg900-2
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7k325tffg900-2
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.dcp' for cell 'system_i/axi_gpio_0'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0.dcp' for cell 'system_i/clk_wiz_1'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0.dcp' for cell 'system_i/mdm_1'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/system_microblaze_0_0.dcp' for cell 'system_i/microblaze_0'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0.dcp' for cell 'system_i/rst_clk_wiz_1_100M'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_axi_periph_imp_xbar_0/system_microblaze_0_axi_periph_imp_xbar_0.dcp' for cell 'system_i/microblaze_0_axi_periph/xbar'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0.dcp' for cell 'system_i/microblaze_0_local_memory/dlmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0.dcp' for cell 'system_i/microblaze_0_local_memory/dlmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0.dcp' for cell 'system_i/microblaze_0_local_memory/ilmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_ilmb_v10_0/system_ilmb_v10_0.dcp' for cell 'system_i/microblaze_0_local_memory/ilmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'd:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_lmb_bram_0/system_lmb_bram_0.dcp' for cell 'system_i/microblaze_0_local_memory/lmb_bram'
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.271 . Memory (MB): peak = 963.566 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 393 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/system_microblaze_0_0.xdc] for cell 'system_i/microblaze_0/U0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/system_microblaze_0_0.xdc] for cell 'system_i/microblaze_0/U0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0_board.xdc] for cell 'system_i/clk_wiz_1/inst'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0_board.xdc] for cell 'system_i/clk_wiz_1/inst'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0.xdc] for cell 'system_i/clk_wiz_1/inst'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0.xdc] for cell 'system_i/clk_wiz_1/inst'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0_board.xdc] for cell 'system_i/rst_clk_wiz_1_100M/U0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0_board.xdc] for cell 'system_i/rst_clk_wiz_1_100M/U0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0.xdc] for cell 'system_i/rst_clk_wiz_1_100M/U0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_rst_clk_wiz_1_100M_0/system_rst_clk_wiz_1_100M_0.xdc] for cell 'system_i/rst_clk_wiz_1_100M/U0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc] for cell 'system_i/axi_gpio_0/U0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc] for cell 'system_i/axi_gpio_0/U0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc] for cell 'system_i/axi_gpio_0/U0'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc] for cell 'system_i/axi_gpio_0/U0'
+Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/src/mb_led.xdc]
+Finished Parsing XDC File [D:/work2026/ai/opencode/memblaze_demo/mb_led/src/mb_led.xdc]
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0.xdc] for cell 'system_i/mdm_1/U0'
+INFO: [Timing 38-35] Done setting XDC timing constraints. [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0.xdc:4]
+INFO: [Timing 38-2] Deriving generated clocks [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0.xdc:4]
+get_clocks: Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1736.117 ; gain = 627.727
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_mdm_1_0/system_mdm_1_0.xdc] for cell 'system_i/mdm_1/U0'
+Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0_late.xdc] for cell 'system_i/clk_wiz_1/inst'
+Finished Parsing XDC File [d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_clk_wiz_1_0/system_clk_wiz_1_0_late.xdc] for cell 'system_i/clk_wiz_1/inst'
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Generating merged BMM file for the design top 'system_wrapper'...
+INFO: [Memdata 28-144] Successfully populated the BRAM INIT strings from the following elf files: d:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.gen/sources_1/bd/system/ip/system_microblaze_0_0/data/mb_bootloop_le.elf 
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 1736.117 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 112 instances were transformed.
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 96 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+
+24 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 1736.117 ; gain = 1052.309
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k325t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 1736.117 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.375 . Memory (MB): peak = 1765.102 ; gain = 28.984
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+Phase 1.1 Core Generation And Design Setup | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Phase 1 Initialization | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Timer Update
+Phase 2.1 Timer Update | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.141 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Phase 2.2 Timing Data Collection
+Phase 2.2 Timing Data Collection | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.163 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Phase 2 Timer Update And Timing Data Collection | Checksum: 13c8680ba
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.164 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Phase 3 Retarget
+INFO: [Opt 31-1851] Number of loadless carry chains removed were: 0
+INFO: [Opt 31-1834] Total Chains To Be Transformed Were: 0 AND Number of Transformed insts Created are: 0
+INFO: [Opt 31-1566] Pulled 1 inverters resulting in an inversion of 14 pins
+INFO: [Opt 31-138] Pushed 1 inverter(s) to 1 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: 2669a1edf
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.379 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Retarget | Checksum: 2669a1edf
+INFO: [Opt 31-389] Phase Retarget created 125 cells and removed 176 cells
+INFO: [Opt 31-1021] In phase Retarget, 3 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 4 Constant propagation | Checksum: 1d7693cd1
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.446 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Constant propagation | Checksum: 1d7693cd1
+INFO: [Opt 31-389] Phase Constant propagation created 10 cells and removed 142 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 1 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 5 Sweep
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2164.168 ; gain = 0.000
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Phase 5 Sweep | Checksum: 27063a5e1
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.947 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Sweep | Checksum: 27063a5e1
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 175 cells
+INFO: [Opt 31-1021] In phase Sweep, 1 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 6 BUFG optimization
+INFO: [Opt 31-194] Inserted BUFG system_i/mdm_1/U0/Use_E2.BSCAN_I/Dbg_Update_0_BUFG_inst to drive 41 load(s) on clock net system_i/mdm_1/U0/Use_E2.BSCAN_I/Dbg_Update_0_BUFG
+INFO: [Opt 31-193] Inserted 1 BUFG(s) on clock nets
+Phase 6 BUFG optimization | Checksum: 1d0fd432f
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+BUFG optimization | Checksum: 1d0fd432f
+INFO: [Opt 31-662] Phase BUFG optimization created 1 cells of which 1 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 1d0fd432f
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Shift Register Optimization | Checksum: 1d0fd432f
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 21964f211
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Post Processing Netlist | Checksum: 21964f211
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 1 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Phase 9.2 Verifying Netlist Connectivity | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Phase 9 Finalization | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |             125  |             176  |                                              3  |
+|  Constant propagation         |              10  |             142  |                                              1  |
+|  Sweep                        |               0  |             175  |                                              1  |
+|  BUFG optimization            |               1  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              1  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2164.168 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 20 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 0 WE to EN ports
+Number of BRAM Ports augmented: 0 newly gated: 0 Total Ports: 40
+Ending PowerOpt Patch Enables Task | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.090 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2245.730 ; gain = 81.562
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Ending Netlist Obfuscation Task | Checksum: 19d7d62c1
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+57 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:14 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 509.613
+INFO: [Vivado 12-24828] Executing command : report_drc -file system_wrapper_drc_opted.rpt -pb system_wrapper_drc_opted.pb -rpx system_wrapper_drc_opted.rpx
+Command: report_drc -file system_wrapper_drc_opted.rpt -pb system_wrapper_drc_opted.pb -rpx system_wrapper_drc_opted.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_drc_opted.rpt.
+report_drc completed successfully
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Writing XDEF routing.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_opt.dcp' has been generated.
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-83] Releasing license: Implementation
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: f62e373c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 104f7e6e0
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.570 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 1595aeb3b
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 1595aeb3b
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 1595aeb3b
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 11cc5adf6
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 168509839
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 168509839
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2.4 Global Place Phase1
+Phase 2.4 Global Place Phase1 | Checksum: 12bc8d78a
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:06 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2.5 Global Place Phase2
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 12bc8d78a
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:06 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 119 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 54 nets or LUTs. Breaked 0 LUT, combined 54 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |             54  |                    54  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |             54  |                    54  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 263f1434d
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 2.5 Global Place Phase2 | Checksum: 239a53f89
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 2 Global Placement | Checksum: 239a53f89
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 2325970fa
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 286ed114f
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 1d9f58c37
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 2a07195a5
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.5 Small Shape Detail Placement
+Phase 3.5 Small Shape Detail Placement | Checksum: 2c25d11e0
+
+Time (s): cpu = 00:00:15 ; elapsed = 00:00:10 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.6 Re-assign LUT pins
+Phase 3.6 Re-assign LUT pins | Checksum: 2c32dd17e
+
+Time (s): cpu = 00:00:15 ; elapsed = 00:00:10 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 3.7 Pipeline Register Optimization
+Phase 3.7 Pipeline Register Optimization | Checksum: 2bcb3fe1a
+
+Time (s): cpu = 00:00:15 ; elapsed = 00:00:10 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 2bcb3fe1a
+
+Time (s): cpu = 00:00:15 ; elapsed = 00:00:10 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 1236c279b
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=9.963 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: c2da01b4
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.210 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Place 46-56] BUFG insertion identified 0 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 0, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 1c1a0d63c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.236 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 4.1.1.1 BUFG Insertion | Checksum: 1236c279b
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=9.963. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 196b94955
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: 196b94955
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 196b94955
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                1x1|                2x2|
+|___________|___________________|___________________|
+|      South|                1x1|                1x1|
+|___________|___________________|___________________|
+|       East|                1x1|                1x1|
+|___________|___________________|___________________|
+|       West|                1x1|                2x2|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 196b94955
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 4.3 Placer Reporting | Checksum: 196b94955
+
+Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.010 . Memory (MB): peak = 2245.730 ; gain = 0.000
+
+Time (s): cpu = 00:00:18 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 1d7176aa1
+
+Time (s): cpu = 00:00:18 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Ending Placer Task | Checksum: 15aafcc03
+
+Time (s): cpu = 00:00:18 ; elapsed = 00:00:12 . Memory (MB): peak = 2245.730 ; gain = 0.000
+92 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:00:22 ; elapsed = 00:00:14 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Vivado 12-24838] Running report commands "report_control_sets, report_io, report_utilization" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file system_wrapper_utilization_placed.rpt -pb system_wrapper_utilization_placed.pb
+INFO: [Vivado 12-24828] Executing command : report_control_sets -verbose -file system_wrapper_control_sets_placed.rpt
+report_control_sets: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_io -file system_wrapper_io_placed.rpt
+report_io: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.132 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote PlaceDB: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.309 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2245.730 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.345 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_placed.dcp' has been generated.
+Command: phys_opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k325t'
+
+Starting Initial Update Timing Task
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.768 . Memory (MB): peak = 2245.730 ; gain = 0.000
+INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 9.963 | TNS= 0.000 | 
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.000 ns. All physical synthesis setup optimizations will be skipped.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Implementation
+103 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 2250.027 ; gain = 4.297
+Wrote PlaceDB: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.310 . Memory (MB): peak = 2257.441 ; gain = 11.711
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2257.441 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 2257.441 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2257.441 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2257.441 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.345 . Memory (MB): peak = 2257.441 ; gain = 11.711
+INFO: [Common 17-1381] The checkpoint 'D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_physopt.dcp' has been generated.
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k325t'
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: df65d71c ConstDB: 0 ShapeSum: 52ce7a97 RouteDB: 287b7a50
+Post Restoration Checksum: NetGraph: f5dd4e1c | NumContArr: a4c91b1a | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 31ff85e70
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:34 . Memory (MB): peak = 2487.562 ; gain = 230.121
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 31ff85e70
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:34 . Memory (MB): peak = 2487.562 ; gain = 230.121
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 31ff85e70
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:34 . Memory (MB): peak = 2487.562 ; gain = 230.121
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 2106f10c2
+
+Time (s): cpu = 00:00:48 ; elapsed = 00:00:37 . Memory (MB): peak = 2552.855 ; gain = 295.414
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=10.133 | TNS=0.000  | WHS=-0.373 | THS=-110.173|
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.00181599 %
+  Global Horizontal Routing Utilization  = 0.000856878 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 3401
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 3401
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1c87b3cc6
+
+Time (s): cpu = 00:00:49 ; elapsed = 00:00:38 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 3 Global Routing
+Phase 3 Global Routing | Checksum: 1c87b3cc6
+
+Time (s): cpu = 00:00:49 ; elapsed = 00:00:38 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 4 Initial Routing
+
+Phase 4.1 Initial Net Routing Pass
+Phase 4.1 Initial Net Routing Pass | Checksum: 296257242
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:39 . Memory (MB): peak = 2567.316 ; gain = 309.875
+Phase 4 Initial Routing | Checksum: 296257242
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:39 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 5 Rip-up And Reroute
+
+Phase 5.1 Global Iteration 0
+ Number of Nodes with overlaps = 309
+ Number of Nodes with overlaps = 2
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=10.023 | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Global Iteration 0 | Checksum: 2204538d2
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+Phase 5 Rip-up And Reroute | Checksum: 2204538d2
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 6 Delay and Skew Optimization
+
+Phase 6.1 Delay CleanUp
+Phase 6.1 Delay CleanUp | Checksum: 2204538d2
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 6.2 Clock Skew Optimization
+Phase 6.2 Clock Skew Optimization | Checksum: 2204538d2
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+Phase 6 Delay and Skew Optimization | Checksum: 2204538d2
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 7 Post Hold Fix
+
+Phase 7.1 Hold Fix Iter
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=10.110 | TNS=0.000  | WHS=0.070  | THS=0.000  |
+
+Phase 7.1 Hold Fix Iter | Checksum: 287dddbe9
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+Phase 7 Post Hold Fix | Checksum: 287dddbe9
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.252139 %
+  Global Horizontal Routing Utilization  = 0.299305 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 8 Route finalize | Checksum: 287dddbe9
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 287dddbe9
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 27dc91076
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 11 Post Process Routing
+Phase 11 Post Process Routing | Checksum: 27dc91076
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Phase 12 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=10.110 | TNS=0.000  | WHS=0.070  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 12 Post Router Timing | Checksum: 27dc91076
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+Total Elapsed time in route_design: 41.437 secs
+
+Phase 13 Post-Route Event Processing
+Phase 13 Post-Route Event Processing | Checksum: 16a7e4b0b
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:41 . Memory (MB): peak = 2567.316 ; gain = 309.875
+INFO: [Route 35-16] Router Completed Successfully
+Ending Routing Task | Checksum: 16a7e4b0b
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:42 . Memory (MB): peak = 2567.316 ; gain = 309.875
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+114 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:00:55 ; elapsed = 00:00:42 . Memory (MB): peak = 2567.316 ; gain = 309.875
+INFO: [Vivado 12-24828] Executing command : report_drc -file system_wrapper_drc_routed.rpt -pb system_wrapper_drc_routed.pb -rpx system_wrapper_drc_routed.rpx
+Command: report_drc -file system_wrapper_drc_routed.rpt -pb system_wrapper_drc_routed.pb -rpx system_wrapper_drc_routed.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_drc_routed.rpt.
+report_drc completed successfully
+INFO: [Vivado 12-24828] Executing command : report_methodology -file system_wrapper_methodology_drc_routed.rpt -pb system_wrapper_methodology_drc_routed.pb -rpx system_wrapper_methodology_drc_routed.rpx
+Command: report_methodology -file system_wrapper_methodology_drc_routed.rpt -pb system_wrapper_methodology_drc_routed.pb -rpx system_wrapper_methodology_drc_routed.rpx
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [DRC 23-133] Running Methodology with 2 threads
+INFO: [Vivado_Tcl 2-1520] The results of Report Methodology are in file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_methodology_drc_routed.rpt.
+report_methodology completed successfully
+INFO: [Vivado 12-24828] Executing command : report_timing_summary -max_paths 10 -report_unconstrained -file system_wrapper_timing_summary_routed.rpt -pb system_wrapper_timing_summary_routed.pb -rpx system_wrapper_timing_summary_routed.rpx -warn_on_violation 
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -2, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Vivado 12-24838] Running report commands "report_incremental_reuse, report_route_status" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_incremental_reuse -file system_wrapper_incremental_reuse_routed.rpt
+INFO: [Vivado_Tcl 4-1062] Incremental flow is disabled. No incremental reuse Info to report.
+INFO: [Vivado 12-24828] Executing command : report_route_status -file system_wrapper_route_status.rpt -pb system_wrapper_route_status.pb
+INFO: [Vivado 12-24828] Executing command : report_power -file system_wrapper_power_routed.rpt -pb system_wrapper_power_summary_routed.pb -rpx system_wrapper_power_routed.rpx
+Command: report_power -file system_wrapper_power_routed.rpt -pb system_wrapper_power_summary_routed.pb -rpx system_wrapper_power_routed.rpx
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+WARNING: [Power 33-332] Found switching activity that implies high-fanout reset nets being asserted for excessive periods of time which may result in inaccurate power analysis.
+Resolution: To review and fix problems, please run Power Constraints Advisor in the GUI from Tools > Power Constraints Advisor or run report_power with the -advisory option to generate a text report.
+131 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+report_power completed successfully
+INFO: [Vivado 12-24828] Executing command : report_clock_utilization -file system_wrapper_clock_utilization_routed.rpt
+INFO: [Vivado 12-24828] Executing command : report_bus_skew -warn_on_violation -file system_wrapper_bus_skew_routed.rpt -pb system_wrapper_bus_skew_routed.pb -rpx system_wrapper_bus_skew_routed.rpx
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -2, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+generate_parallel_reports: Time (s): cpu = 00:00:22 ; elapsed = 00:00:13 . Memory (MB): peak = 2567.316 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2567.316 ; gain = 0.000
+Wrote PlaceDB: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.323 . Memory (MB): peak = 2583.484 ; gain = 16.168
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2583.484 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.062 . Memory (MB): peak = 2583.484 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2583.484 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2583.484 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.403 . Memory (MB): peak = 2583.484 ; gain = 16.168
+INFO: [Common 17-1381] The checkpoint 'D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_routed.dcp' has been generated.
+Command: write_bitstream -force system_wrapper.bit
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k325t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k325t'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado 12-3199] DRC finished with 0 Errors
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+INFO: [Designutils 20-2272] Running write_bitstream with 2 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Bitstream compression saved 81319424 bits.
+Writing bitstream ./system_wrapper.bit...
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Common 17-83] Releasing license: Implementation
+145 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:00:24 ; elapsed = 00:00:17 . Memory (MB): peak = 3166.855 ; gain = 583.371
+INFO: [Common 17-206] Exiting Vivado at Mon Aug 31 22:55:15 2026...
+[Mon Aug 31 22:55:19 2026] impl_1 finished
+wait_on_runs: Time (s): cpu = 00:00:00 ; elapsed = 00:02:42 . Memory (MB): peak = 1122.145 ; gain = 0.000
+IMPL STATUS: write_bitstream Complete!
+PUBLISH: D:/work2026/ai/opencode/memblaze_demo/dist/mb_led.bit
+Command: open_checkpoint D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.079 . Memory (MB): peak = 1132.945 ; gain = 10.801
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.244 . Memory (MB): peak = 1165.051 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 392 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 1271.262 ; gain = 1.215
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.185 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.096 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.308 . Memory (MB): peak = 1936.008 ; gain = 0.000
+Restored from archive | CPU: 0.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.382 . Memory (MB): peak = 1936.008 ; gain = 1.945
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 1936.008 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 112 instances were transformed.
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 95 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+  SRLC16E => SRL16E: 1 instance 
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2024.2 (64-bit) build 5239630
+open_checkpoint: Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1936.008 ; gain = 813.863
+Command: write_cfgmem -force -format bin -interface SPIx4 -loadbit {up 0x0 D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper.bit} -file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/mb_led.bin
+Creating config memory files...
+Creating bitstream load up from address 0x00000000
+Loading bitfile D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper.bit
+Memory size is calculated to be 2 MB
+Writing file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/mb_led.bin
+Writing log file D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/mb_led.prm
+===================================
+Configuration Memory information
+===================================
+File Format        BIN
+Interface          SPIX4
+Size               2M
+Start Address      0x00000000
+End Address        0x001FFFFF
+
+Addr1         Addr2         Date                    File(s)
+0x00000000    0x001382D7    Aug 31 22:55:14 2026    D:/work2026/ai/opencode/memblaze_demo/mb_led/projects/mb_led.runs/impl_1/system_wrapper.bit
+55 Infos, 3 Warnings, 0 Critical Warnings and 1 Errors encountered.
+write_cfgmem completed successfully
+PUBLISH: D:/work2026/ai/opencode/memblaze_demo/dist/mb_led.bin
+INFO: [Project 1-1918] Creating Hardware Platform: D:/work2026/ai/opencode/memblaze_demo/mb_led/mb_led.xsa ...
+INFO: [Project 1-1943] The Hardware Platform can be used for Hardware
+INFO: [Project 1-1941] Successfully created Hardware Platform: D:/work2026/ai/opencode/memblaze_demo/mb_led/mb_led.xsa
+INFO: [Hsi 55-2053] elapsed time for repository (D:/xilinx/rundir3/Vivado/2024.2/data/embeddedsw) loading 0 seconds
+EXPORT: D:/work2026/ai/opencode/memblaze_demo/mb_led/mb_led.xsa
+=== DONE. dist/: mb_led.bit / .ltx / .bin ; xsa: D:/work2026/ai/opencode/memblaze_demo/mb_led/mb_led.xsa ===
+=== Software: source mb_led/scripts/build_elf.tcl with xsct (Vitis) ===
+INFO: [Common 17-206] Exiting Vivado at Mon Aug 31 22:55:36 2026...

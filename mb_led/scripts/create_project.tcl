@@ -52,7 +52,16 @@ apply_bd_automation -rule xilinx.com:bd_rule:microblaze \
 
 # resolve the auto-created cells (names can be clk_wiz_0/1, mdm_0/1, ...)
 set clk_cell [lindex [get_bd_cells -quiet -filter {VLNV =~ *clk_wiz*}] 0]
+set mdm_cell [lindex [get_bd_cells -quiet -filter {VLNV =~ *mdm*}] 0]
 if {$clk_cell eq ""} { error "clocking wizard not created by automation" }
+
+# 2b) MDM: enable the JTAG UART (virtual serial console over JTAG).
+#     C_INTERCONNECT=2 turns the MDM master into an S_AXI slave holding
+#     the UART registers; its old master port disappears (periph M01 frees up).
+set_property -dict [list \
+    CONFIG.C_USE_UART {1} \
+    CONFIG.C_INTERCONNECT {2} \
+] [get_bd_cells $mdm_cell]
 
 # 3) AXI GPIO: 3-bit output -> LEDs (the AXI interface that controls the LEDs)
 create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio axi_gpio_0
@@ -78,9 +87,15 @@ catch {connect_bd_net [get_bd_pins ${rst_cell}/peripheral_aresetn] [get_bd_pins 
 
 # drive the system reset from the MDM debug reset (fixes proc_sys_reset
 # EXT_LPF floating-input error at opt_design)
-set mdm_cell [lindex [get_bd_cells -quiet -filter {VLNV =~ *mdm*}] 0]
 if {$mdm_cell ne ""} {
     catch {connect_bd_net [get_bd_pins ${mdm_cell}/Debug_SYS_Rst] [get_bd_pins ${rst_cell}/ext_reset_in]}
+}
+
+# 3b) MDM JTAG UART: its S_AXI slave hangs on the freed M01 master port
+if {$mdm_cell ne ""} {
+    connect_bd_intf_net [get_bd_intf_pins ${periph}/M01_AXI] [get_bd_intf_pins ${mdm_cell}/S_AXI]
+    connect_bd_net [get_bd_pins ${clk_cell}/clk_out1] [get_bd_pins ${mdm_cell}/S_AXI_ACLK]
+    connect_bd_net [get_bd_pins ${rst_cell}/peripheral_aresetn] [get_bd_pins ${mdm_cell}/S_AXI_ARESETN]
 }
 
 # 5) single-ended 50 MHz input clock from the board (D27)
