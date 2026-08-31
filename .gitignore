@@ -33,8 +33,13 @@ webtalk*
 !dist/*.bit
 !dist/*.bin
 !dist/*.ltx
+!dist/*.elf
 # project-local dist folders are NOT tracked (canonical dist is at repo root)
 */dist/
+
+# ---- Vitis / software build artifacts ----
+*.xsa
+app_ws/
 
 # ---- IP cache ----
 ip_user_files/

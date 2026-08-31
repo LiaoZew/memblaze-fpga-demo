@@ -13,6 +13,17 @@
 | `program_flash.tcl` | 一键烧录脚本（推荐）：连接 JTAG → 擦除 → 空白检查 → 编程 → 校验，自动使用同目录 `led_demo.bin` |
 | `FLASH_BURN_GUIDE.md` | SPI flash 烧录完整指南（GUI / 脚本 / 独立编程器三种方法 + FAQ） |
 
+## MicroBlaze 工程（mb_led）产物
+
+MicroBlaze + AXI GPIO 软核工程（见 `mb_led/README.md`）：
+
+| 文件 | 说明 |
+|---|---|
+| `mb_led.bit` | MicroBlaze 硬件 bitstream（AXI GPIO 控制 3 LED） |
+| `mb_led.bin` | SPIx4 flash 镜像（硬件自启动；软核程序经 xsct/Vitis 下载，见 `mb_led/README.md`） |
+| `mb_led.elf` | 软核程序（standalone，LED 闪烁演示） |
+| 无 `.ltx` | MicroBlaze 调试走 MDM 专用 JTAG 口，不需要探针文件（正常） |
+
 ## 快速开始
 
 **A. 烧录 flash（上电自启动，推荐，已实机验证）**
