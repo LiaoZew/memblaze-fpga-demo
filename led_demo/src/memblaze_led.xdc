@@ -22,7 +22,7 @@ set_property PACKAGE_PIN T21 [get_ports led_r]
 set_property IOSTANDARD  LVCMOS18 [get_ports led_r]
 
 ## ---- Bitstream settings copied from the board reference ddr.xdc (SPIx4 flash) ----
-set_property BITSTREAM.GENERAL.COMPRESS FALSE [current_design]
-set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 set_property CONFIG_MODE SPIx4 [current_design]

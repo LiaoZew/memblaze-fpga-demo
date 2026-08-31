@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 `timescale 1ns / 1ps
 
-module memblaze_vio_top (
+module led_demo_top (
     input  wire sysclk,   // 50 MHz board clock, D27
     output wire led_g,    // LED_G green , R24
     output wire led_y,    // LED_Y yellow, T20

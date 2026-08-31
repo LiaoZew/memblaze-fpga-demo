@@ -33,17 +33,17 @@
     （Micron 已将 N25Q 系列更名 MT25Q；Vivado 2024.2 中 256Mb 对应条目为
     `mt25ql256-spi-x1_x2_x4` = 3.3 V、`mt25qu256-spi-x1_x2_x4` = 1.8 V。
     旧版 Vivado 名为 `n25q256-3.3v-spi-x1_x2_x4`，以本机 `get_cfgmem_parts` 查询结果为准）
-- `dist/<工程名>.bin` 由 `memblaze_vio/scripts/gen_flash_bin.tcl` 生成
-  （`write_cfgmem -format bin -interface SPIx4`），镜像为**未压缩** bitstream
-  （`BITSTREAM.GENERAL.COMPRESS FALSE`），数据约 11 MB，位于 32 MB flash 的 **0x0** 起始，
-  远小于 16 MB 地址边界，无需 4 字节寻址，直接烧录即可。
+- `dist/<工程名>.bin` 由 `led_demo/scripts/create_project.tcl` **一步生成**（写位流后自动
+  `write_cfgmem -format bin -interface SPIx4`），镜像已**压缩**（`BITSTREAM.GENERAL.COMPRESS TRUE`），
+  配置时钟 **CONFIGRATE 50**（之前 66 MHz 太高会导致烧录/上电异常，已改 50），
+  位于 32 MB flash 的 **0x0** 起始，远小于 16 MB 地址边界，无需 4 字节寻址，直接烧录即可。
 - ⚠️ `.bin`、`.bit`、`.ltx` 必须来自**同一次编译**，混合使用会导致探针不匹配或功能不一致。
 
 ---
 
 ## 2. 方法一（推荐）：一键 Tcl 烧录脚本 `dist/program_flash.tcl`
 
-脚本已生成在 `dist/` 目录，自动定位同目录下的 `memblaze_vio.bin`，无需手改路径：
+脚本已生成在 `dist/` 目录，自动定位同目录下的 `led_demo.bin`，无需手改路径：
 
 ```text
 # 无窗口批处理（推荐，已在实机验证通过）
@@ -165,15 +165,12 @@ bin 容量（16/32MB 同错）、ADDRESS_RANGE（use_file 同错）。
 # 1) 一键烧录 SPI flash（推荐）
 vivado -mode batch -source dist/program_flash.tcl
 
-# 2) 重新编译并发布 bit/ltx（完整仓库）
-vivado -mode batch -source memblaze_vio/scripts/create_project.tcl
+# 2) 一键重新编译并发布 bit/ltx/bin（完整仓库，一条命令搞定）
+vivado -mode batch -source led_demo/scripts/create_project.tcl
 
-# 3) 重新生成 SPIx4 flash 镜像并发布 bin（完整仓库）
-vivado -mode batch -source memblaze_vio/scripts/gen_flash_bin.tcl
-
-# 4) JTAG 在线调试（不烧 flash）
+# 3) JTAG 在线调试（不烧 flash）
 #    Hardware Manager -> Program Device -> dist/<工程名>.bit (+ 勾选同名 .ltx)
 #    hw_vio 窗口 vio_0: probe_out0/1/2 -> LED_G/LED_Y/LED_R
 
-# 5) 烧 flash -> 断电重启 -> 上电自运行
+# 4) 烧 flash -> 断电重启 -> 上电自运行
 ```

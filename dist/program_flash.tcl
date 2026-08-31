@@ -57,7 +57,7 @@ proc find_vivado_root {} {
 }
 
 set script_dir [file dirname [file normalize [info script]]]
-set bin_file    [getopt BIN        [file join $script_dir memblaze_vio.bin]]
+set bin_file    [getopt BIN        [file join $script_dir led_demo.bin]]
 set design_bit  [getopt DESIGN_BIT {}]
 # -----------------------------------------------------------------------------
 # [FLASH PART] 板载 flash 型号 (Micron N25Q256A13EF804F, 3.3 V) 对应的
@@ -82,7 +82,7 @@ catch {open_hw_manager}
 if {[llength [get_hw_servers -quiet]] == 0} {
     connect_hw_server
 }
-if {[llength [get_hw_targets -quiet]] == 0} {
+if { ([llength [get_hw_targets -quiet]] == 0) || ([get_property IS_OPENED [get_hw_targets ]] == 0) } {
     if {$target ne ""} {
         open_hw_target $target
     } else {

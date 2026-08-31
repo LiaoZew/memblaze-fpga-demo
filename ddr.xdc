@@ -5,8 +5,8 @@ set_property PACKAGE_PIN R24 [get_ports init_calib_complete]
 set_property IOSTANDARD LVCMOS18 [get_ports init_calib_complete]
 
 
-set_property BITSTREAM.GENERAL.COMPRESS FALSE [current_design]
-set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 set_property CONFIG_MODE SPIx4 [current_design]
 
