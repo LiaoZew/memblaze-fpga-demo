@@ -43,11 +43,14 @@
 
 ## 2. 方法一（推荐）：一键 Tcl 烧录脚本 `dist/program_flash.tcl`
 
-脚本已生成在 `dist/` 目录，自动定位同目录下的 `led_demo.bin`，无需手改路径：
+脚本已生成在 `dist/` 目录，默认自动定位同目录下的 `led_demo.bin`，无需手改路径；
+**也可以把 bin 文件名作为命令行参数传入**：
 
 ```text
 # 无窗口批处理（推荐，已在实机验证通过）
-vivado -mode batch -source dist/program_flash.tcl
+vivado -mode batch -source dist/program_flash.tcl                    ;# 默认 led_demo.bin
+vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin      ;# 指定镜像（文件名）
+vivado -mode batch -source dist/program_flash.tcl -tclargs D:/x/y.bin       ;# 或完整路径
 
 # 或在 Vivado GUI 的 Hardware Manager -> Tcl Console 中：
 source dist/program_flash.tcl
@@ -162,8 +165,9 @@ bin 容量（16/32MB 同错）、ADDRESS_RANGE（use_file 同错）。
 ## 6. 常见操作速查
 
 ```text
-# 1) 一键烧录 SPI flash（推荐）
+# 1) 一键烧录 SPI flash（推荐；默认 led_demo.bin，可用 -tclargs 指定其它镜像）
 vivado -mode batch -source dist/program_flash.tcl
+vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin
 
 # 2) 一键重新编译并发布 bit/ltx/bin（完整仓库，一条命令搞定）
 vivado -mode batch -source led_demo/scripts/create_project.tcl

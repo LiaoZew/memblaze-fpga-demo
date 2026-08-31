@@ -17,18 +17,23 @@
 #   exists` will report false for them. (Verified on hardware.)
 #   Log then shows: "design has 1 SPI core(s)", and program_hw_cfgmem works.
 #
-# Image: <this script's folder>/memblaze_vio.bin
-#        (SPIx4, uncompressed bitstream ~11 MB, starting at flash address 0x0)
+# Image: <this script's folder>/<bin>  (SPIx4, compressed, starts at 0x0;
+#        selectable via -tclargs or BIN, default led_demo.bin)
 #
 # Usage:
 #   Option A - batch (no GUI):
-#       vivado -mode batch -source program_flash.tcl
+#       vivado -mode batch -source program_flash.tcl -tclargs <bin文件>
+#         <bin文件> 可为文件名（取脚本同目录）或完整路径，例如：
+#         vivado -mode batch -source program_flash.tcl -tclargs mb_led.bin
+#         vivado -mode batch -source program_flash.tcl -tclargs D:/x/y.bin
 #   Option B - Vivado GUI, Hardware Manager -> Tcl Console:
 #       source program_flash.tcl
 #
+# Image selection priority: -tclargs <bin> > set BIN ... > 默认 led_demo.bin
+#
 # Optional overrides (set BEFORE sourcing; env-var or plain Tcl var):
 #   set DESIGN_BIT D:/x/design.bit        ;# override the SPI-bridge bit
-#   set BIN        D:/x/another.bin       ;# use a different .bin
+#   set BIN        D:/x/another.bin       ;# use a different .bin (no -tclargs)
 #   set FLASH_PART mt25ql256-spi-x1_x2_x4 ;# different cfgmem part
 #   set TARGET     */xilinx_tcf/Digilent/2102...A ;# pick the JTAG target
 #   set JTAG_FREQ  6000000                ;# lower JTAG clock
@@ -40,6 +45,17 @@ proc getopt {name default} {
     if {[info exists ::env($name)]} { return $::env($name) }
     if {[info exists ::$name]}      { return [set ::$name] }
     return $default
+}
+
+# first positional command-line argument (vivado -tclargs <bin>)
+proc first_pos_arg {} {
+    if {![info exists ::argv]} { return "" }
+    foreach a $::argv {
+        if {[string index $a 0] eq "-"} { continue }
+        if {$a in {vivado batch tcl gui source}} { continue }
+        return $a
+    }
+    return ""
 }
 
 # locate the Vivado install root (env var, or walk up from the executable)
@@ -57,7 +73,21 @@ proc find_vivado_root {} {
 }
 
 set script_dir [file dirname [file normalize [info script]]]
-set bin_file    [getopt BIN        [file join $script_dir led_demo.bin]]
+
+# --- image file: 命令行 -tclargs <bin> > set BIN > 默认 led_demo.bin ----------
+set arg_bin [first_pos_arg]
+if {$arg_bin ne ""} {
+    set bin_file $arg_bin
+    puts "BIN (command line): $arg_bin"
+} else {
+    set bin_file [getopt BIN {}]
+    if {$bin_file eq ""} { set bin_file "led_demo.bin" }
+}
+if {![string match {*[\\/]*} $bin_file]} {
+    set bin_file [file join $script_dir $bin_file]
+}
+puts "image: $bin_file"
+
 set design_bit  [getopt DESIGN_BIT {}]
 # -----------------------------------------------------------------------------
 # [FLASH PART] 板载 flash 型号 (Micron N25Q256A13EF804F, 3.3 V) 对应的
@@ -70,7 +100,10 @@ set target      [getopt TARGET     {}]
 set jtag_freq   [getopt JTAG_FREQ  {}]
 set only_verify [expr {[getopt ONLY_VERIFY 0] eq "1"}]
 
-if {![file exists $bin_file]} { error "Image file not found: $bin_file" }
+if {![file exists $bin_file]} {
+    puts "Available images in $script_dir: [lsort [glob -nocomplain [file join $script_dir *.bin]]]"
+    error "Image file not found: $bin_file"
+}
 
 # ---- connect to the JTAG target (idempotent) ---------------------------------
 # If a hw_server / target is ALREADY connected (e.g. the GUI Hardware Manager

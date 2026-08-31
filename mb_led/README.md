@@ -49,7 +49,7 @@ D:\xilinx\rundir3\Vitis\2024.2\bin\xsct.bat mb_led\scripts\build_elf.tcl
 
 ## 下载运行
 
-1. **烧硬件**：`vivado -mode batch -source dist/program_flash.tcl`（烧 flash）
+1. **烧硬件**：`vivado -mode batch -source dist/program_flash.tcl -tclargs mb_led.bin`（把软核工程镜像烧入 flash）
    或 Hardware Manager → Program Device 选 `dist/mb_led.bit`（JTAG，调试用）。
 2. **下软核程序**（xsdb / xsct Tcl）：
    ```tcl

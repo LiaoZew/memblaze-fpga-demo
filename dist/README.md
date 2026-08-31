@@ -29,7 +29,9 @@ MicroBlaze + AXI GPIO 软核工程（见 `mb_led/README.md`）：
 **A. 烧录 flash（上电自启动，推荐，已实机验证）**
 
 ```
+# 默认烧 led_demo.bin；用 -tclargs 指定其它镜像（文件名或完整路径）
 vivado -mode batch -source program_flash.tcl
+vivado -mode batch -source program_flash.tcl -tclargs mb_led.bin
 # 脚本按 JTAG 扫描到的器件型号，自动使用 Vivado 自带的 SPI 网桥 bit
 # （data/xicom/cfgmem/bitfile.zip 的虚拟路径直接读取，无需解压），然后
 # 完成 擦除 -> 编程 -> 校验（约 8~9 分钟），完成后断电重启即从 flash 自举
