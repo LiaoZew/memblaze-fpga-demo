@@ -79,12 +79,17 @@ xsct% jtagterminal        ← 输入 S / R 触发一轮；终端内即显示 CSV
 
 ## 排错
 
+- **先确认软核在跑**：`xsct.connect` 后选 MicroBlaze 目标，读两次 `rrd pc`
+  （capture_uart.tcl 会自动打印 PC1/PC2）——**两次不同即软核正在执行**。
+- **固件数据去向**：capture_uart.tcl 的 `-program` 模式会打印
+  `ACQ_BRAM[0..3]` 与 `PC` 诊断；正弦正常时应为 `0,3212,6393,9512`。
+  若 BRAM 非正弦（如固定 0x8），通常是板侧触发/复位时序问题，先查
+  `ctrl` 位与 MDM Debug_SYS_Rst 复位路径，并在 Vitis Serial Terminal 观察 banner。
 - **数据通路验证**：`wave_gen → wbuf → reader` 的行为仿真已通过（样本序列按
-  32 点 LUT 展开：51×0 → 3212 → 6393 → …）。重新生成/sources 改动后如需自证，
-  可自行例化 tb（参考仓库历史）。
+  32 点 LUT 展开：0×32 → 3212 → 6393 → …）。
 - 400 MHz 时钟：clk_wiz 自动取 VCO=1200（50MHz×24），输出 400=1200/3、100=1200/12
-- JTAG UART 捕获：`readjtaguart` 需要工具枚举出 JTAG UART 目标；若 xsct 报
-  "Target doesn't support Jtag Uart"，请改用 Vitis IDE 的 Serial Terminal /
-  Hardware Manager 关联 .ltx 后查看（本机 xsct 未枚举出该目标，属工具差异）
+- **JTAG UART 上传**：上传 1024 行经 JTAG UART 很慢（每字符需 host 读走），
+  `readjtaguart` 捕获窗口建议 ≥ 30 s；若 xsct 报 "Target doesn't support Jtag
+  Uart" 或始终为空，请用 Vitis IDE 的 Serial Terminal（JTAG UART）长时观察。
 - 软核未跑/无输出：确认用**带 ELF 的合并 bit/bin**（`merge_elf.tcl` 之后再烧录），
-  上电会自动跑一轮 sine
+  上电会自动跑一轮 sine。
