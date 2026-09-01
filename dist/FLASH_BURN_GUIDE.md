@@ -23,7 +23,7 @@
 
 ## 1. 背景与前提
 
-- 板卡从 **SPI flash（SPIx4 模式）** 上电自配置。依据板卡参考约束 `ddr.xdc`：
+- 板卡从 **SPI flash（SPIx4 模式）** 上电自配置。依据板卡参考约束 `board_reference/ddr.xdc`：
   `CONFIG_MODE SPIx4`、`BITSTREAM.CONFIG.SPI_BUSWIDTH 4`、`CONFIGRATE 66`。
 - **板载 flash 已确认：Micron N25Q256A13EF804F**
   - 型号解读：`N25Q`（SPI NOR 家族）`256`（256 Mb）`A`（产品代）`13`（3.3 V 供电）

@@ -7,7 +7,20 @@
 | `led_demo/` | **VIO 硬核**：Vivado 内建 VIO 核在线开关 3 个 LED（HW Manager 勾选 `probe_out0/1/2`） | [led_demo/README.md](led_demo/README.md) |
 | `mb_led/` | **MicroBlaze 软核**：AXI GPIO 控 LED + **JTAG UART 串口命令**（`0~7`/`G`/`Y`/`R`），ELF 已并入 bit/bin，上电自跑 | [mb_led/README.md](mb_led/README.md) |
 
-## IO 约束（两工程一致，依据 `MEMBLAZE_PINS_V2.xls` 与 `ddr.xdc`）
+## 目录结构（多工程并行规范）
+
+```
+board_reference/     板卡原始资料（所有工程共享，不属于任何工程）
+  ├── MEMBLAZE_PINS_V2.xls   引脚总表
+  ├── ddr.xdc                参考设计系统级约束（SPIx4 设置等）
+  └── ddr_72bit.ucf          DDR3 72-bit 接口引脚约束
+dist/                预编译产物：dist/<工程名>.bit/.ltx/.bin/.elf（互不覆盖）
+docs/                规范与说明（版本控制与发布规范等）
+led_demo/            VIO 硬核工程（独立目录：src/scripts/projects/README）
+mb_led/              MicroBlaze 软核工程（独立目录：src/scripts/projects/README + xsa）
+```
+
+## IO 约束（两工程一致，依据 `board_reference/MEMBLAZE_PINS_V2.xls` 与 `board_reference/ddr.xdc`）
 
 | 信号 | 引脚 | 电平 |
 |---|---|---|
