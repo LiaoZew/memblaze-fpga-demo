@@ -6,6 +6,7 @@
 |---|---|---|
 | `led_demo/` | **VIO 硬核**：Vivado 内建 VIO 核在线开关 3 个 LED（HW Manager 勾选 `probe_out0/1/2`） | [led_demo/README.md](led_demo/README.md) |
 | `mb_led/` | **MicroBlaze 软核**：AXI GPIO 控 LED + **JTAG UART 串口命令**（`0~7`/`G`/`Y`/`R`），ELF 已并入 bit/bin，上电自跑 | [mb_led/README.md](mb_led/README.md) |
+| `sgen_uart/` | **波形发生器 + 软核回传**：50M→100M/400M，400MHz 引擎生成正弦/斜坡(16bit)→BRAM→FIFO→**AXI DMA**→软核→JTAG UART→PC 可视化 | [sgen_uart/README.md](sgen_uart/README.md) |
 
 ## 目录结构（多工程并行规范）
 
