@@ -3,15 +3,13 @@
 #
 #   xsct.bat sgen_uart\tools\capture_uart.tcl [R|S] [-program]
 #     R / S : wave selector for the mwr trigger (default R)
-#     -program: first load dist/sgen_uart.bit (ELF embedded) so the firmware
-#               boots and auto-streams one sine cycle - no trigger needed
+#     -program: load dist/sgen_uart.bit (ELF embedded) WHILE the UART read
+#               window is already open - the boot banner and the auto sine
+#               upload are captured (leaving the window closed during boot
+#               could otherwise let the MDM TX FIFO fill and stall printf)
 #   python sgen_uart/tools/plot_csv.py sgen_uart/tools/out/capture.csv
-#
-# The capture window opens BEFORE the trigger, so the boot banner and the
-# auto sine upload are included. If the tool did not expose a real JTAG-UART
-# target, a diagnostic is printed (use the Vitis IDE Serial Terminal then).
 #==============================================================================
-set cap_ms 9000
+set cap_ms 12000
 set args_l [lrange $argv 0 end]
 set sel "R"
 set do_program 0
@@ -26,16 +24,6 @@ scan $sel %c ascii
 connect
 after 500
 
-# ---- optional: program the merged bit so the firmware boots ----
-if {$do_program} {
-    if {[catch {targets -set -filter {name =~ "*xc7k325t*"}}]} {
-        puts "NOTE: no FPGA target found to program"
-    }
-    catch {fpga -file [file join [file dirname [info script]] .. .. dist sgen_uart.bit]} fp
-    puts "fpga program: $fp"
-    after 1500
-}
-
 # ---- select a target (required by mwr and readjtaguart) ----
 set picked 0
 catch {targets -set -filter {name =~ "*MicroBlaze #0*"} ; set picked 1}
@@ -47,19 +35,7 @@ if {!$picked} {
     puts "      and pick the MicroBlaze (or JTAG UART) target manually."
 }
 
-# ---- diagnostic: read the acquisition BRAM to confirm the firmware ran ----
-if {$picked} {
-    set d ""
-    catch {mrd -size w 0xC0000000 4} d
-    puts "ACQ_BRAM[0..3] = $d  (sine starts 0,3212,6393,9512)"
-    # program counter twice: moving PC proves the soft-core is executing
-    catch {rrd pc} pc1
-    after 200
-    catch {rrd pc} pc2
-    puts "PC: $pc1 -> $pc2  (a moving PC proves the soft-core is executing)"
-}
-
-# ---- capture window opens FIRST (banner + auto sine included) ----
+# ---- OPEN the UART read window first (drains the MDM TX FIFO) ----
 set fp [open $out_file w]
 if {[catch {readjtaguart -start -handle $fp} e]} {
     puts "readjtaguart: $e"
@@ -69,6 +45,29 @@ if {[catch {readjtaguart -start -handle $fp} e]} {
     puts "  2) plot: python sgen_uart/tools/plot_csv.py $out_file"
     close $fp
     exit 1
+}
+
+# ---- optional: program the merged bit while the window is open ----
+if {$do_program} {
+    if {[catch {targets -set -filter {name =~ "*xc7k325t*"}}]} {
+        puts "NOTE: no FPGA target found to program"
+    }
+    catch {fpga -file [file join [file dirname [info script]] .. .. dist sgen_uart.bit]} fp
+    puts "fpga program: $fp"
+    after 1500
+    # re-select the MicroBlaze target (it re-enumerates after programming)
+    set picked 0
+    catch {targets -set -filter {name =~ "*MicroBlaze #0*"} ; set picked 1}
+    catch {targets -set -filter {name =~ "*MicroBlaze*"}     ; set picked 1}
+}
+
+# ---- diagnostics (UART is being drained concurrently) ----
+if {$picked} {
+    set d ""
+    catch {mrd -size w 0xC0000000 4} d
+    puts "ACQ_BRAM[0..3] = $d  (sine starts 0,3212,6393,9512)"
+    catch {rrd pc} pc1
+    puts "PC = $pc1  (nonzero/advancing proves the soft-core is executing)"
 }
 
 # ---- kick the firmware (MDM uart RX FIFO register @ 0x41400004) ----
