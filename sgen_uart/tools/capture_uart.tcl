@@ -56,7 +56,8 @@ if {$picked} {
     catch {rrd pc} pc1
     after 200
     catch {rrd pc} pc2
-    puts "PC: $pc1 -> $pc2  (running if different)"
+    puts "PC: $pc1 -> $pc2  (a moving PC proves the soft-core is executing)"
+}
 
 # ---- capture window opens FIRST (banner + auto sine included) ----
 set fp [open $out_file w]
