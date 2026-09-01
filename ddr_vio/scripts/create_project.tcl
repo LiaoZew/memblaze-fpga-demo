@@ -6,7 +6,7 @@
 #   VIO probe_in  : init_calib_done / app_rdy / app_wdf_rdy / rd_valid /
 #                   rd_data[71:0] / busy / done
 #   时钟: D27 50MHz(单端) -> MIG sys_clk_i；ui_clk = MIG 内部时钟(例 400MHz)
-#   引脚: board_reference/ddr3_72bit_converted.xdc (SSTL15, banks 32/33/34)
+#   引脚: board_reference/ddr3_64bit_converted.xdc (SSTL15, banks 32/33/34)
 #
 # Run:
 #   vivado -mode batch -source scripts/create_project.tcl
@@ -45,36 +45,85 @@ set_property default_lib xil_defaultlib [current_project]
 #        Pin Selection: click "Import Pin Files" and load ddr_vio/pins_bank.csv
 #          (then "Validate" - 72-bit -> DQS groups 0..8 must map cleanly)
 #        OR skip pin import; the board pins are enforced later anyway by
-#        board_reference/ddr3_72bit_converted.xdc (identical signal names).
+#        board_reference/ddr3_64bit_converted.xdc (identical signal names).
 #     3) OK -> the generated mig_0.xci appears under ddr_vio/ip/mig_0/
 #------------------------------------------------------------------------------
-set mig_xci [file join $root ip mig_0 mig_0.xci]
+set mig_dir  [file join $root ip mig_0]
+set mig_prj  [file join $mig_dir mig.prj]
 set mig_defs [get_ipdefs -all -filter {NAME == mig_7series}]
 if {[llength $mig_defs] == 0} { error "mig_7series IP not found in the catalog" }
 set mig_ver [lindex [split [get_property VLNV [lindex $mig_defs end]] :] 3]
 puts "Using MIG version: $mig_ver"
-if {![file exists $mig_xci]} {
+
+# regenerate the MIG IP from the .prj every run (stale dirs cause
+# "Unconfigured MIG instance" errors)
+foreach d [glob -nocomplain [file join $mig_dir *]] {
+    if {[string match *mig_0_* [file tail $d]]} { file delete -force $d }
+}
+file delete -force [file join $mig_dir mig_0.xci]
+
+if {![file exists $mig_prj]} {
     puts ""
     puts "=============================================================="
-    puts " MIG IP NOT FOUND: ddr_vio/ip/mig_0/mig_0.xci"
-    puts " MIG 7 Series cannot be configured from Tcl (parameters are"
-    puts " locked); create it once through the GUI wizard:"
-    puts ""
-    puts "   1) open the project in the GUI (scripts/open_gui.tcl)"
-    puts "   2) IP Catalog -> Memory & Storage -> MIG 7 Series"
-    puts "      right-click -> Customize IP"
-    puts "      Name 'mig_0', save to ddr_vio/ip"
-    puts "      Memory: DDR3, part MT41K512M8DA-125, 72-bit, no ECC"
-    puts "      Speed 800 Mt/s;  Input clock 20000 ps, Single-Ended"
-    puts "      Pins:  Import ddr_vio/pins_bank.csv  (then Validate)"
-    puts "      (the board pins are anyway enforced by"
-    puts "       board_reference/ddr3_72bit_converted.xdc)"
-    puts "   3) re-run this script"
+    puts " MIG project file NOT FOUND: ddr_vio/ip/mig_0/mig.prj"
+    puts " (a prj-driven MIG is fully scriptable; the GUI path is a"
+    puts "  fallback: IP Catalog -> MIG 7 Series -> Customize IP,"
+    puts "  save mig_0 under ddr_vio/ip)"
     puts "=============================================================="
     exit 0
 }
+
+puts "Generating MIG IP from $mig_prj ..."
+create_ip -name mig_7series -vendor xilinx.com -library ip -version $mig_ver \
+          -module_name mig_0
+set_property CONFIG.XML_INPUT_FILE $mig_prj [get_ips mig_0]
+generate_target all [get_ips mig_0]
+
+set mig_xci [file join $proj_dir ${proj_name}.srcs sources_1 ip mig_0 mig_0.xci]
+if {![file exists $mig_xci]} {
+    set mig_xci [lindex [lsort [glob -nocomplain [file join $mig_dir * mig_0.xci]]] end]
+}
+if {$mig_xci eq ""} { error "MIG xci not produced from $mig_prj" }
 add_files -norecurse $mig_xci
-puts "MIG IP loaded: $mig_xci"
+generate_target all [get_files -quiet mig_0.xci]
+
+# MIG 4.2 prj-driven outputs miss the dlib controller RTL, and the OOC run
+# then fails with "module memc_ui_top_std not found". Workaround:
+#  - put MIG on global synthesis (no OOC run), and
+#  - add the dlib controller sources directly to the top-level fileset.
+set_property GENERATE_SYNTH_CHECKPOINT false [get_files $mig_xci]
+set dlib_d3 {D:/xilinx/rundir3/Vivado/2024.2/data/ip/xilinx/mig_7series_v4_2/data/dlib/7series/ddr3_sdram/verilog/rtl}
+set dlib_cm {D:/xilinx/rundir3/Vivado/2024.2/data/ip/xilinx/mig_7series_v4_2/data/dlib/common}
+set user_rtl [file join $mig_dir dlib_ext]
+set dlib_files [list]
+foreach dir [list $dlib_d3 $dlib_cm] {
+    set dlib_files [concat $dlib_files \
+        [glob -nocomplain [file join $dir * *.v]] \
+        [glob -nocomplain [file join $dir * * *.v]] \
+        [glob -nocomplain [file join $dir * * * *.v]] \
+        [glob -nocomplain [file join $dir * * * * *.v]]]
+}
+set dlib_files [lsort -unique $dlib_files]
+puts "DLIB_RTL_COUNT=[llength $dlib_files]"
+# copy dlib sources INTO the generated user_design/rtl tree (that is what the
+# synthesizer reads for the MIG IP in global mode)
+# only the one missing controller RTL: memc_ui_top_std.v
+set extra_dlib [list]
+foreach f [glob -nocomplain [file join $dlib_d3 ip_top mig_7series_v4_2_memc_ui_top_std.v]] { lappend extra_dlib $f }
+file delete -force $user_rtl
+file mkdir $user_rtl
+set dlib_added 0
+foreach f $extra_dlib {
+    file copy -force $f $user_rtl
+    incr dlib_added
+}
+puts "DLIB_ADDED=$dlib_added"
+puts "MIG IP loaded (global synth + dlib rtl): $mig_xci"
+
+# drop the OOC run so the global synthesizer compiles the MIG RTL directly
+catch {reset_run -quiet mig_0_synth_1}
+catch {delete_runs -force -quiet mig_0_synth_1}
+
 
 #------------------------------------------------------------------------------
 # VIO: 6 output probes (control) + 8 input probes (observe)
@@ -107,13 +156,25 @@ foreach f {top.v ddr_ctrl.v} {
     add_files -norecurse -fileset sources_1 [file join $src_dir $f]
 }
 add_files -norecurse -fileset constrs_1 [file join $src_dir ${proj_name}.xdc]
-add_files -norecurse -fileset constrs_1 [file join $repo_root board_reference ddr3_72bit_converted.xdc]
+add_files -norecurse -fileset constrs_1 [file join $repo_root board_reference ddr3_64bit_converted.xdc]
 set_property top $top_module [current_fileset]
 update_compile_order -fileset sources_1
 
 #------------------------------------------------------------------------------
 # Run flow
 #------------------------------------------------------------------------------
+puts "DBG_MEMC_IN_SOURCES=[llength [get_files -quiet -filter {NAME =~ *memc_ui_top_std*} -of_objects [get_filesets sources_1]]]"
+puts "DBG_VERILOG_TOTAL=[llength [get_files -quiet -filter {FILE_TYPE == Verilog} -of_objects [get_filesets sources_1]]]"
+update_compile_order -fileset sources_1
+# force the synthesizer process to (re)read the sources incl. the dlib extras:
+# a PRE hook inside synth_1 re-adds the dlib dir and updates compile order
+set dlib_ext_dir [file join $mig_dir dlib_ext]
+set hookf [file join $mig_dir pre_synth.tcl]
+set fh [open $hookf w]
+puts $fh "add_files -norecurse -fileset sources_1 [glob -nocomplain [file join $dlib_ext_dir *.v]]"
+puts $fh "update_compile_order -fileset sources_1"
+close $fh
+set_property STEPS.SYNTH_DESIGN.TCL.PRE $hookf [get_runs synth_1]
 launch_runs synth_1 -jobs 4
 wait_on_run synth_1
 set synth_status [get_property STATUS [get_runs synth_1]]

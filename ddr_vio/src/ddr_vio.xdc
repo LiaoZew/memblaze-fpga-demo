@@ -12,3 +12,6 @@ set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 set_property CONFIG_MODE SPIx4 [current_design]
+## D27(bank16) �� MMCM �������ſ�ר��ʱ��·�ɣ�demo ���ܣ�
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets sys_clk_i_IBUF]
+

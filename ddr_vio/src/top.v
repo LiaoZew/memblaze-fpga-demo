@@ -7,11 +7,11 @@
 //     probe_out2[0]   rd_en        (rising edge -> one 72-bit read)
 //     probe_out3[26:0] wr_addr     (app address: {bank,row,column} mapping)
 //     probe_out4[26:0] rd_addr
-//     probe_out5[71:0] wr_data
+//     probe_out5[63:0] wr_data
 //     probe_out6[0]   (unused)
 //   probe_in:
 //     0 init_calib_done  1 app_rdy  2 app_wdf_rdy
-//     3 rd_valid         4 rd_data[71:0]  5 busy  6 done
+//     3 rd_valid         4 rd_data[63:0]  5 busy  6 done
 //     7 rst echo
 //
 // DDR pins are declared here and constrained by
@@ -20,7 +20,7 @@
 `timescale 1ns / 1ps
 
 module ddr_vio_top (
-    input  wire        sys_clk_i,     // 50 MHz board clock D27
+    input  wire        sys_clk_i,     // 50 MHz board clock D27 (-> clk_wiz x2 = 100M for MIG)
     output wire [15:0] ddr3_addr,
     output wire [2:0]  ddr3_ba,
     output wire        ddr3_cas_n,
@@ -30,17 +30,36 @@ module ddr_vio_top (
     output wire        ddr3_ras_n,
     output wire        ddr3_reset_n,
     output wire        ddr3_we_n,
-    inout  wire [71:0] ddr3_dq,
-    inout  wire [8:0]  ddr3_dqs_n,
-    inout  wire [8:0]  ddr3_dqs_p,
-    output wire [8:0]  ddr3_dm,
+    inout  wire [63:0] ddr3_dq,
+    inout  wire [7:0] ddr3_dqs_n,
+    inout  wire [7:0] ddr3_dqs_p,
+    output wire [7:0] ddr3_dm,
     output wire [0:0]  ddr3_odt,
     output wire [0:0]  ddr3_cs_n
 );
 
+    // ---- 50M -> 100M for MIG (MMCME2_ADV, single-ended) ----
+    wire        clk_100, clkfb, clk_100_locked;
+    MMCME2_ADV #(
+        .BANDWIDTH("OPTIMIZED"), .CLKIN1_PERIOD(20.000),
+        .DIVCLK_DIVIDE(1), .CLKFBOUT_MULT_F(24.0), .CLKFBOUT_PHASE(0.0),
+        .CLKOUT0_DIVIDE_F(12.0), .CLKOUT0_DUTY_CYCLE(0.5), .CLKOUT0_PHASE(0.0),
+        .CLKOUT1_DIVIDE(1), .CLKOUT2_DIVIDE(1), .CLKOUT3_DIVIDE(1),
+        .CLKOUT4_DIVIDE(1), .CLKOUT5_DIVIDE(1), .CLKOUT6_DIVIDE(1),
+        .REF_JITTER1(0.010)
+    ) u_mmcm (
+        .CLKOUT0(clk_100), .CLKOUT0B(),
+        .CLKOUT1(), .CLKOUT1B(), .CLKOUT2(), .CLKOUT2B(), .CLKOUT3(), .CLKOUT3B(),
+        .CLKOUT4(), .CLKOUT5(), .CLKOUT6(),
+        .CLKFBOUT(clkfb), .CLKFBOUTB(),
+        .LOCKED(clk_100_locked),
+        .CLKIN1(sys_clk_i), .CLKIN2(1'b0), .CLKINSEL(1'b1), .CLKFBIN(clkfb),
+        .DADDR(7'b0), .DCLK(1'b0), .DEN(1'b0), .DI(16'd0), .DWE(1'b0),
+        .PSCLK(1'b0), .PSEN(1'b0), .PSINCDEC(1'b0), .PWRDWN(1'b0), .RST(1'b0)
+    );
+
     // ---- MIG signals ------------------------------------------------------
     wire        sys_rst;
-    wire        clk_ref_i   = 1'b0;    // internal ref clock (no external pin)
     wire        ui_clk;
     wire        ui_clk_sync_rst;
     wire        init_calib_complete;
@@ -49,18 +68,20 @@ module ddr_vio_top (
     wire [2:0]  app_cmd;
     wire [26:0] app_addr;
     wire        app_en;
-    wire [71:0] app_wdf_data;
+    wire [63:0] app_wdf_data;
     wire        app_wdf_wren;
     wire        app_wdf_end;
-    wire [71:0] app_rd_data;
+    wire [63:0] app_rd_data;
     wire        app_rd_data_end;
     wire        app_rd_data_valid;
 
     // ---- VIO ---------------------------------------------------------------
     wire [0:0]  v_rst, v_wr_en, v_rd_en;
     wire [26:0] v_wr_addr, v_rd_addr;
-    wire [71:0] v_wr_data;
+    wire [63:0] v_wr_data;
+    wire        v_extra;              // spare VIO output (unconnected sink)
     wire [0:0]  s_init, s_rdy, s_wdf_rdy, s_rd_vld, s_busy, s_done, s_echo;
+    wire [63:0] s_rd_data;
 
     vio_0 u_vio (
         .clk        (ui_clk),
@@ -70,7 +91,7 @@ module ddr_vio_top (
         .probe_out3 (v_wr_addr),
         .probe_out4 (v_rd_addr),
         .probe_out5 (v_wr_data),
-        .probe_out6 (v_rst),
+        .probe_out6 (v_extra),
         .probe_in0  (s_init),
         .probe_in1  (s_rdy),
         .probe_in2  (s_wdf_rdy),
@@ -89,8 +110,8 @@ module ddr_vio_top (
 
     // ---- MIG core ----------------------------------------------------------
     mig_0 u_mig (
-        .sys_clk_i            (sys_clk_i),
-        .clk_ref_i            (clk_ref_i),
+        .sys_clk_i            (clk_100),
+
         .sys_rst              (sys_rst),
         .ui_clk               (ui_clk),
         .ui_clk_sync_rst      (ui_clk_sync_rst),
@@ -124,7 +145,7 @@ module ddr_vio_top (
     );
 
     // ---- app 手动控制状态机 ------------------------------------------------
-    wire [71:0] wr_data_used = v_wr_data;
+    wire [63:0] wr_data_used = v_wr_data;
     assign sys_rst = v_rst[0];
 
     ddr_ctrl u_ctrl (

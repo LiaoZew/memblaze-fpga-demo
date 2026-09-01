@@ -14,16 +14,16 @@ module ddr_ctrl (
     input  wire        rd_en,
     input  wire [26:0] wr_addr,
     input  wire [26:0] rd_addr,
-    input  wire [71:0] wr_data,
+    input  wire [63:0] wr_data,
     input  wire        app_rdy,
     input  wire        app_wdf_rdy,
     output reg  [2:0]  app_cmd,
     output reg  [26:0] app_addr,
     output reg         app_en,
-    output reg  [71:0] app_wdf_data,
+    output reg  [63:0] app_wdf_data,
     output reg         app_wdf_wren,
     output reg         app_wdf_end,
-    input  wire [71:0] rd_data,
+    input  wire [63:0] rd_data,
     input  wire        rd_valid,
     output reg         busy,
     output reg         done
@@ -109,6 +109,6 @@ module ddr_ctrl (
     end
 
     // unused input kept for symmetry (read data is observed via VIO directly)
-    wire [71:0] unused_rd = rd_data;
+    wire [63:0] unused_rd = rd_data;
 
 endmodule
