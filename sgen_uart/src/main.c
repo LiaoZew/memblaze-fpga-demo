@@ -85,6 +85,32 @@ static void help(void)
     xil_printf("output: CSV lines  index,value  over the JTAG UART\r\n\r\n");
 }
 
+/* diagnostics-safe demo: write a sine into a reserved MB LOCAL-memory area
+ * (0x8000, plain store - no AXI interconnect involved), then the host can
+ * read it back via xsdb 'mrd 0x00008000' (0,0,...,3212 at 0x8080, ...).
+ * The AXI-interconnect BRAM path is exercised separately by run_capture. */
+#define SIN_BUF ((volatile u32 *)0x00008000)
+static void cpu_sine_to_local(u32 sel)
+{
+    static const s16 lut[32] = {
+           0,  3212,  6393,  9512, 12539, 15446, 18204, 20787,
+       23170, 25329, 27245, 28898, 30273, 31356, 32137, 32609,
+       32767, 32609, 32137, 31356, 30273, 28898, 27245, 25329,
+       23170, 20787, 18204, 15446, 12539,  9512,  6393,  3212
+    };
+    s32 i;
+    for (i = 0; i < 256; i++) {
+        s16 v = sel ? (s16)((u32)i << 6)
+                    : lut[(i >> 3) & 31];
+        SIN_BUF[i] = (u32)(u16)v;
+    }
+    if (SIN_BUF[32] == 3212u && SIN_BUF[96] == 6393u) {
+        xil_printf("LMB sine verify OK @0x8000\r\n");
+    } else {
+        xil_printf("LMB sine verify FAILED\r\n");
+    }
+}
+
 int main(void)
 {
     XAxiDma_Config *dmacfg;
@@ -103,8 +129,11 @@ int main(void)
     ctrl_write(0x00);
     xil_printf("\r\nsgen_uart ready ('S' sine / 'R' ramp / 'h' help)\r\n");
 
-    /* demo: one sine cycle automatically on start (host only needs to watch) */
-    xil_printf("=== sine (auto) ===\r\n");
+    /* demo: an easily-verifiable sine in MB local memory (@0x8000) */
+    cpu_sine_to_local(0);
+
+    /* hardware path: 400 MHz engine + reader + FIFO + DMA */
+    xil_printf("=== sine (hw path) ===\r\n");
     run_capture(0);
 
     while (1) {

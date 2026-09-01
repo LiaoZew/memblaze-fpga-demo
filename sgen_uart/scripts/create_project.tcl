@@ -162,6 +162,24 @@ if {$mdm_cell ne ""} {
 # 10) addresses (MB space: gpio/dma-lite/mdm/bram; the DMA writes the same
 #     axi_bram_ctrl segment via its 0x80000000 window)
 assign_bd_address
+# IMPORTANT: make the DMA's S2MM window on the acq BRAM sit at 0xC0000000
+# (same address the firmware programs into the S2MM descriptor) - otherwise
+# the DMA write lands in an unmapped hole of ITS address space and the BRAM
+# never receives data.
+set dma_sp [get_bd_addr_spaces -quiet axi_dma_0/Data_S2MM]
+if {$dma_sp ne ""} {
+    set seg_found ""
+    foreach s [get_bd_addr_segs -quiet -of_objects $dma_sp] {
+        if {[string match *axi_bram_ctrl* [get_property NAME $s]]} { set seg_found $s }
+    }
+    if {$seg_found eq ""} {
+        create_bd_addr_seg -range 0x2000 -offset 0xC0000000 $dma_sp \
+            [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Reg] SEG_axi_bram_ctrl_0_Mem0
+    } else {
+        set_property offset 0xC0000000 [get_bd_addr_segs $seg_found]
+    }
+    puts "DMA window on acq BRAM: $seg_found @0xC0000000"
+}
 
 validate_bd_design
 
