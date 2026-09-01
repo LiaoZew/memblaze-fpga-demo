@@ -88,8 +88,13 @@ connect_bd_net [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_ports ctrl]
 create_bd_port -dir I -from 1 -to 0 sts
 connect_bd_net [get_bd_ports sts] [get_bd_pins axi_gpio_0/gpio2_io_i]
 
-# 6) acquisition BRAM (AXI slave, 32-bit x 4096 = 16KB, defaults are fine)
+# 6) acquisition BRAM (AXI slave, 32-bit x 4096 = 16KB)
 create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl axi_bram_ctrl_0
+set_property -dict [list \
+    CONFIG.DATA_WIDTH {32} \
+    CONFIG.MEM_DEPTH  {4096} \
+    CONFIG.ECC       {0} \
+] [get_bd_cells axi_bram_ctrl_0]
 
 # 7) AXI DMA: S2MM only, 16-bit AXIS in, 32-bit MM out (parameters use the
 #    lowercase c_* names of the 2024.2 axi_dma)
@@ -159,26 +164,20 @@ if {$mdm_cell ne ""} {
     catch {connect_bd_net [get_bd_pins ${rst_cell}/peripheral_aresetn] [get_bd_pins ${mdm_cell}/S_AXI_ARESETN]}
 }
 
-# 10) addresses (MB space: gpio/dma-lite/mdm/bram; the DMA writes the same
-#     axi_bram_ctrl segment via its 0x80000000 window)
+# 10) addresses. BRAM gets the same window (0x40020000, low address area)
+#     in BOTH the MicroBlaze space and the DMA S2MM space.
 assign_bd_address
-# IMPORTANT: make the DMA's S2MM window on the acq BRAM sit at 0xC0000000
-# (same address the firmware programs into the S2MM descriptor) - otherwise
-# the DMA write lands in an unmapped hole of ITS address space and the BRAM
-# never receives data.
-set dma_sp [get_bd_addr_spaces -quiet axi_dma_0/Data_S2MM]
-if {$dma_sp ne ""} {
+foreach sp_name {/microblaze_0/Data axi_dma_0/Data_S2MM} {
+    set sp [get_bd_addr_spaces -quiet $sp_name]
+    if {$sp eq ""} { continue }
     set seg_found ""
-    foreach s [get_bd_addr_segs -quiet -of_objects $dma_sp] {
+    foreach s [get_bd_addr_segs -quiet -of_objects $sp] {
         if {[string match *axi_bram_ctrl* [get_property NAME $s]]} { set seg_found $s }
     }
-    if {$seg_found eq ""} {
-        create_bd_addr_seg -range 0x2000 -offset 0xC0000000 $dma_sp \
-            [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Reg] SEG_axi_bram_ctrl_0_Mem0
-    } else {
-        set_property offset 0xC0000000 [get_bd_addr_segs $seg_found]
+    if {$seg_found ne ""} {
+        set_property offset 0x40020000 [get_bd_addr_segs $seg_found]
+        puts "bram seg $sp_name -> 0x40020000"
     }
-    puts "DMA window on acq BRAM: $seg_found @0xC0000000"
 }
 
 validate_bd_design

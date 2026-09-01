@@ -73,23 +73,29 @@ xsct% jtagterminal        ← 输入 S / R 触发一轮；终端内即显示 CSV
 
 | 命令 | 行为 |
 |---|---|
-| `S` | 生成正弦 → DMA 回传 → 上传 CSV |
-| `R` | 生成斜坡 → DMA 回传 → 上传 CSV |
+| `S` | 生成正弦（256 点，CPU 路径）→ JTAG UART 上传 CSV |
+| `R` | 生成斜坡 → JTAG UART 上传 CSV |
 | `h` | 帮助 |
+
+> **当前交付路径**：固件在 MB 本地内存（LMB @0x8000）生成波形并逐行
+> `index,value` 上传到 JTAG UART（已验证：LMB 数据可由 xsdb `mrd 0x8000`
+> 读回、CSV 可被终端捕获后 matplotlib 绘图）。
+> **待查条目（已实证）**：`axi_bram_ctrl`（采集 BRAM）数据通路在本机工具链
+> 下不可用——mwr/mrd/固件读写在所有端口、参数、段地址（0xC0000000 与
+> 0x40020000）组合下读回恒为 0x8（GPIO/MDM 寄存器读写正常，可排除互连）；
+> `wave_gen`(400M) 的 done 也未见（cts 级问题待板侧硬件验证）。
 
 ## 排错
 
-- **先确认软核在跑**：`xsct.connect` 后选 MicroBlaze 目标，读两次 `rrd pc`
-  （capture_uart.tcl 会自动打印 PC1/PC2）——**两次不同即软核正在执行**。
-- **固件数据去向**：capture_uart.tcl 的 `-program` 模式会打印
-  `ACQ_BRAM[0..3]` 与 `PC` 诊断；正弦正常时应为 `0,3212,6393,9512`。
-  若 BRAM 非正弦（如固定 0x8），通常是板侧触发/复位时序问题，先查
-  `ctrl` 位与 MDM Debug_SYS_Rst 复位路径，并在 Vitis Serial Terminal 观察 banner。
-- **数据通路验证**：`wave_gen → wbuf → reader` 的行为仿真已通过（样本序列按
-  32 点 LUT 展开：0×32 → 3212 → 6393 → …）。
-- 400 MHz 时钟：clk_wiz 自动取 VCO=1200（50MHz×24），输出 400=1200/3、100=1200/12
-- **JTAG UART 上传**：上传 1024 行经 JTAG UART 很慢（每字符需 host 读走），
+- **先确认软核在跑**：xsct → MicroBlaze 目标 → `rrd pc`（capture_uart.tcl 会打印），
+  有值/在变即软核执行中。
+- **波形数据可验证**（不经 UART）：
+  `mrd -size w 0x00008000 256` → 读到 LMB 内正弦（0→3212→6393…）。
+- **JTAG UART 上传**：256 行 CSV 上传较慢（每字符需 host 读走），
   `readjtaguart` 捕获窗口建议 ≥ 30 s；若 xsct 报 "Target doesn't support Jtag
-  Uart" 或始终为空，请用 Vitis IDE 的 Serial Terminal（JTAG UART）长时观察。
+  Uart" 或始终为空，请用 Vitis IDE 的 Serial Terminal（JTAG UART）观察。
+- **数据通路（RTL）验证**：`wave_gen → wbuf → reader` 行为仿真已通过
+  （0×32 → 3212 → 6393 → …）。
+- 400 MHz 时钟：clk_wiz 自动取 VCO=1200（50MHz×24），输出 400=1200/3、100=1200/12
 - 软核未跑/无输出：确认用**带 ELF 的合并 bit/bin**（`merge_elf.tcl` 之后再烧录），
-  上电会自动跑一轮 sine。
+  上电会自动生成并上传一轮正弦。
