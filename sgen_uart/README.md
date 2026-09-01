@@ -44,9 +44,13 @@ D:\xilinx\rundir3\Vitis\2024.2\bin\xsct.bat sgen_uart\tools\capture_uart.tcl R  
 python sgen_uart/tools/plot_csv.py sgen_uart/tools/out/capture.csv
 ```
 
-脚本会：连接 JTAG → 向 MDM 的 UART 收寄存地址（0x41400004）写命令字符 →
-软核生成 1024 点并回传 → `readjtaguart` 捕获 CSV 到
-`sgen_uart/tools/out/capture.csv` → Python(matplotlib) 画出波形 `waveform.png`。
+脚本会：连接 JTAG → 自动选择 MicroBlaze 目标 → 向 MDM 的 UART 收寄存地址（0x41400004）写命令字符 →
+软核生成并回传 → `readjtaguart` 捕获 CSV 到 `sgen_uart/tools/out/capture.csv` → Python(matplotlib) 画波形。
+
+> 若脚本提示 “no MicroBlaze/JTAG-UART target selected” 或
+> “did not expose a JTAG-UART target”：该 xsct 环境未枚举出带 UART 的目标，
+> 请改用 **Vitis IDE → Serial Terminal（JTAG UART）** 触发 `S`/`R` 并把回显的
+> `index,value` 行保存为 CSV 后再 plot（README “方式 B” 所述做法）。
 
 ### 方式 B：手动终端
 
